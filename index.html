@@ -270,7 +270,7 @@
                     </div>
                 </div>
 
-                <!-- Organizer Board: Auto-Importer from FB comments -->
+                <!-- Organizer Dashboard: Auto-Importer from FB comments -->
                 <div class="bg-slate-100 p-6 rounded-2xl border border-slate-200">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="text-xl">🛠️</span>
@@ -305,17 +305,10 @@
     </div>
 
     <script>
-        // Core In-Memory State
-        let votesDatabase = [
-            { venue: "Cafe Miko", weekend: "July 4-5", notes: "Need a spot that Grandpa can navigate easily." },
-            { venue: "Cafe Miko", weekend: "July 11-12", notes: "" },
-            { venue: "Lone Star", weekend: "July 4-5", notes: "The 12yo says they are dying for ribs!" },
-            { venue: "The Good Home", weekend: "July 18-19", notes: "" },
-            { venue: "Cafe Miko", weekend: "July 25-26", notes: "" },
-            { venue: "The Good Home", weekend: "July 4-5", notes: "Waihi family prefers Takanini close to motorway." }
-        ];
+        // Core In-Memory State - INITIALIZED EMPTY FOR FRESH FAMILY VOTING
+        let votesDatabase = [];
 
-        // Backup copy to reset state
+        // Backup copy to reset state (empty by default)
         const initialMockData = JSON.parse(JSON.stringify(votesDatabase));
 
         // Display Toast Notification Helper
@@ -373,7 +366,7 @@
         // Tally database stats & update DOM element progress bars
         function renderStatistics() {
             const total = votesDatabase.length;
-            document.getElementById('vote-count-badge').textContent = `${total} votes tallied`;
+            document.getElementById('vote-count-badge').textContent = `${total} vote${total === 1 ? '' : 's'} tallied`;
 
             // Tallies
             const venueTallies = { "Cafe Miko": 0, "The Good Home": 0, "Lone Star": 0 };
@@ -388,7 +381,7 @@
                 if (dateTallies[vote.weekend] !== undefined) dateTallies[vote.weekend]++;
                 
                 // Print comment to DOM if exist
-                if (vote.notes && vote.notes.trim() !== "") {
+                if (vote.notes && vote.notes.trim() !== "" && vote.notes !== "Imported preference") {
                     const li = document.createElement('li');
                     li.className = "border-b border-slate-50 pb-1.5";
                     li.innerHTML = `"${vote.notes}" <span class="text-indigo-500 text-[10px] font-semibold">(${vote.venue})</span>`;
@@ -478,7 +471,7 @@
                     importedVotes.push({
                         venue: matchedVenue || "Cafe Miko",
                         weekend: matchedDate || "July 4-5",
-                        notes: note || "Imported preference"
+                        notes: note || ""
                     });
                 }
             });
@@ -497,7 +490,7 @@
         function clearToInitialMock() {
             votesDatabase = JSON.parse(JSON.stringify(initialMockData));
             renderStatistics();
-            showToast("Reset to initial mock votes.", "🔄");
+            showToast("Reset to initial empty votes state.", "🔄");
         }
 
         // Safe loader triggers after DOM tree building completes
