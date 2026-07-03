@@ -1,272 +1,510 @@
-<!-- ... existing code ... -->
-<body class="spark-widget-shell">
-<script>
-/**
- * Family Lunch Planner
- * A data-collection and real-time visualization tool for family coordination.
- */
-
-const initApp = () => {
-    let state, ui;
-
-    // 1. Define top-level logic functions inside the loaded block
-    const updateHUD = () => {
-        const votes = state.votesData;
-        const count = votes.length;
-        
-        // Find top venue
-        const tallies = {};
-        votes.forEach(v => {
-            tallies[v.venue] = (tallies[v.venue] || 0) + 1;
-        });
-        
-        let topVenue = "-";
-        let maxVal = 0;
-        for (const [name, val] of Object.entries(tallies)) {
-            if (val > maxVal) {
-                maxVal = val;
-                topVenue = name;
-            }
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Lunch Planner - July 2026</title>
+    <!-- Tailwind CSS for modern utility styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
         }
+    </style>
+</head>
+<body class="h-full bg-slate-50 text-slate-800">
 
-        ui.setEditorial({
-            hud: [
-                { label: "Total Votes", value: count.toString() },
-                { label: "Top Choice", value: topVenue }
-            ]
-        });
-    };
+    <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        <!-- Header Hero Section -->
+        <header class="text-center mb-10">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 mb-3">
+                📅 July 2026 Gathering
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                Family Lunch Coordinator
+            </h1>
+            <p class="mt-3 text-lg text-slate-600 max-w-2xl mx-auto">
+                Finding the perfect middle ground for the crew driving north from <span class="font-semibold text-emerald-600">Te Puke, Tauranga & Waihi</span> and those driving south from <span class="font-semibold text-sky-600">Kumeu</span>!
+            </p>
+            <div class="mt-4 flex flex-wrap justify-center gap-2 text-sm text-slate-500">
+                <span>📍 South Auckland Meeting Point</span>
+                <span class="hidden sm:inline">•</span>
+                <span>🚗 Ample Parking Required</span>
+                <span class="hidden sm:inline">•</span>
+                <span>👥 12 to 15 People</span>
+            </div>
+        </header>
 
-    const submitVote = () => {
-        // Construct the new record from current state
-        const entry = {
-            venue: state.venue,
-            weekend: state.weekend,
-            notes: state.notes
-        };
-        
-        // Update internal state array (triggering reactivity)
-        state.votesData = [...state.votesData, entry];
-        
-        // Reset the text field for the next user
-        state.notes = "";
-        
-        // Refresh the dashboard stats
-        updateHUD();
-    };
+        <!-- Notification Toast (Sleek replacement for window.alert) -->
+        <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+            <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+                <span id="toast-icon">📋</span>
+                <span id="toast-message" class="text-sm font-medium">Copied to clipboard!</span>
+            </div>
+        </div>
 
-    const copyVoteToClipboard = () => {
-        const txt = `🗳️ Vote: ${state.venue} | Date: ${state.weekend}${state.notes ? ` | Notes: ${state.notes}` : ''}`;
-        
-        // Safe fallback clipboard write
-        const el = document.createElement('textarea');
-        el.value = txt;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-        
-        const status = document.getElementById('app-status') || document.querySelector('.header-status');
-        if (status) {
-            status.textContent = "Copied to clipboard! Now paste it into the Facebook comments. 📋";
-            setTimeout(() => { status.textContent = ""; }, 4000);
-        }
-    };
-
-    const importFacebookComments = () => {
-        const text = state.importComments;
-        if (!text.trim()) return;
-        
-        const lines = text.split('\n');
-        const imported = [];
-        
-        lines.forEach(line => {
-            let detectedVenue = "";
-            let detectedWeekend = "";
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            // Scan for venue keywords
-            if (/miko|cafe/i.test(line)) detectedVenue = "Cafe Miko";
-            else if (/good|home|takanini/i.test(line)) detectedVenue = "The Good Home";
-            else if (/lone|star|manukau/i.test(line)) detectedVenue = "Lone Star";
-            
-            // Scan for dates
-            if (/4-5|july 4/i.test(line)) detectedWeekend = "July 4-5";
-            else if (/11-12|july 11/i.test(line)) detectedWeekend = "July 11-12";
-            else if (/18-19|july 18/i.test(line)) detectedWeekend = "July 18-19";
-            else if (/25-26|july 25/i.test(line)) detectedWeekend = "July 25-26";
-            
-            if (detectedVenue || detectedWeekend) {
-                imported.push({
-                    venue: detectedVenue || "Cafe Miko", // Fallback default
-                    weekend: detectedWeekend || "July 4-5", // Fallback default
-                    notes: "Imported from FB comment"
-                });
-            }
-        });
-        
-        if (imported.length > 0) {
-            state.votesData = [...state.votesData, ...imported];
-            state.importComments = ""; // Clear box
-            updateHUD();
-            
-            const status = document.getElementById('app-status') || document.querySelector('.header-status');
-            if (status) {
-                status.textContent = `Success! Imported ${imported.length} family votes. 📊`;
-                setTimeout(() => { status.textContent = ""; }, 4000);
-            }
-        }
-    };
+            <!-- Left Panel: Voting Form -->
+            <main class="lg:col-span-7 space-y-6">
+                
+                <!-- Step 1: Venue Selection -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">1</span>
+                        <h2 class="text-lg font-bold text-slate-900">Choose Your Favorite Spot</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <!-- Venue Option 1 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="venue-choice" value="Cafe Miko" class="sr-only" checked onchange="updateFormPreview()">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="font-semibold text-slate-900 flex items-center gap-1.5">
+                                        Cafe Miko <span class="text-sm font-normal text-slate-500">(Botanic Gardens)</span>
+                                    </span>
+                                    <span class="mt-1 block text-xs text-slate-500">
+                                        Beautiful, scenic, bright. Great for a stroll in the fresh winter gardens.
+                                    </span>
+                                </div>
+                                <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">Relaxed</span>
+                            </div>
+                        </label>
 
-    // 2. Initialize the App
-    const app = WH.createApp({
-        title: "Family Lunch Planner",
-        params: {
-            venue: { 
-                type: "select", 
-                value: "Cafe Miko", 
-                options: ["Cafe Miko", "The Good Home", "Lone Star"], 
-                label: "Preferred Venue" 
-            },
-            weekend: { 
-                type: "select", 
-                value: "July 4-5", 
-                options: ["July 4-5", "July 11-12", "July 18-19", "July 25-26"], 
-                label: "Preferred Weekend" 
-            },
-            notes: { 
-                type: "text", 
-                value: "", 
-                label: "Notes & Requests",
-                desc: "Add dietary notes or specific requests here."
-            },
-            submit: { 
-                type: "button", 
-                label: "Copy My Vote to Paste on Facebook", 
-                onClick: copyVoteToClipboard 
-            },
-            headerOrganizer: {
-                type: "header",
-                label: "Organizer Dashboard"
-            },
-            importComments: {
-                type: "text",
-                value: "",
-                label: "Paste FB Comments Here",
-                desc: "Paste family comment lines here to auto-import votes!"
-            },
-            importButton: {
-                type: "button",
-                label: "Auto-Import Comments",
-                onClick: importFacebookComments
-            }
-        },
-        editorial: {
-            hud: [
-                { label: "Total Votes", value: "0" },
-                { label: "Top Choice", value: "-" }
-            ]
-        }
-    });
+                        <!-- Venue Option 2 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="venue-choice" value="The Good Home" class="sr-only" onchange="updateFormPreview()">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="font-semibold text-slate-900 flex items-center gap-1.5">
+                                        The Good Home <span class="text-sm font-normal text-slate-500">(Takanini)</span>
+                                    </span>
+                                    <span class="mt-1 block text-xs text-slate-500">
+                                        Cozy gastropub with a heated courtyard and hearty Kiwi classic plates.
+                                    </span>
+                                </div>
+                                <span class="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-1 rounded">Cozy</span>
+                            </div>
+                        </label>
 
-    state = app.state;
-    ui = app.ui;
+                        <!-- Venue Option 3 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="venue-choice" value="Lone Star" class="sr-only" onchange="updateFormPreview()">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="font-semibold text-slate-900 flex items-center gap-1.5">
+                                        Lone Star <span class="text-sm font-normal text-slate-500">(Manukau)</span>
+                                    </span>
+                                    <span class="mt-1 block text-xs text-slate-500">
+                                        Lively, fun, big portions. Great private dining space for hungry groups.
+                                    </span>
+                                </div>
+                                <span class="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded">Lively</span>
+                            </div>
+                        </label>
+                    </div>
+                </section>
 
-    // 3. Initialize Internal State with mock data for initial visual interest
-    state.votesData = [
-        { venue: "Cafe Miko", weekend: "July 4-5" },
-        { venue: "Cafe Miko", weekend: "July 11-12" },
-        { venue: "Lone Star", weekend: "July 4-5" },
-        { venue: "The Good Home", weekend: "July 18-19" },
-        { venue: "Cafe Miko", weekend: "July 25-26" },
-        { venue: "The Good Home", weekend: "July 4-5" }
-    ];
+                <!-- Step 2: Date Selector -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">2</span>
+                        <h2 class="text-lg font-bold text-slate-900">Preferred Weekend in July</h2>
+                    </div>
 
-    // Initial HUD sync
-    updateHUD();
+                    <div class="grid grid-cols-2 gap-3">
+                        <!-- Date Option 1 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="date-choice" value="July 4-5" class="sr-only" checked onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">July 4-5</span>
+                            <span class="block text-xs text-slate-500 mt-1">Weekend One</span>
+                        </label>
+                        <!-- Date Option 2 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="date-choice" value="July 11-12" class="sr-only" onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">July 11-12</span>
+                            <span class="block text-xs text-slate-500 mt-1">Weekend Two</span>
+                        </label>
+                        <!-- Date Option 3 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="date-choice" value="July 18-19" class="sr-only" onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">July 18-19</span>
+                            <span class="block text-xs text-slate-500 mt-1">Weekend Three</span>
+                        </label>
+                        <!-- Date Option 4 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="date-choice" value="July 25-26" class="sr-only" onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">July 25-26</span>
+                            <span class="block text-xs text-slate-500 mt-1">Weekend Four</span>
+                        </label>
+                    </div>
+                </section>
 
-    // 4. Initialize Visualization Engine
-    WH.initPlot('viz', ({ width, state }) => {
-        // Extract proxy data to plain array
-        const votes = [...state.votesData];
-        
-        // Transform votes into a dual-category dataset for faceted plotting
-        const chartData = [
-            ...votes.map(v => ({ group: "Venue Popularity", item: v.venue })),
-            ...votes.map(v => ({ group: "Date Availability", item: v.weekend }))
+                <!-- Step 3: Special Notes -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">3</span>
+                        <h2 class="text-lg font-bold text-slate-900">Notes & Dietary Needs</h2>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-3">For example: "Grandpa needs flat walking paths" or "Kid is dairy-free"</p>
+                    <textarea id="notes-input" placeholder="Type notes here..." rows="2" class="w-full rounded-xl border-slate-200 border p-3 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" oninput="updateFormPreview()"></textarea>
+                </section>
+
+                <!-- Step 4: Share / Copy Action -->
+                <section class="bg-slate-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h3 class="font-bold text-lg mb-1">Done Choosing?</h3>
+                        <p class="text-xs text-slate-300 mb-4">Click below to copy your vote. Then, simply paste it in our family group chat or Facebook comments!</p>
+                        
+                        <!-- Visual representation of what will be copied -->
+                        <div class="bg-slate-800 p-3 rounded-lg text-xs font-mono text-indigo-300 border border-slate-700/50 mb-4 break-words">
+                            <span class="text-slate-400">Preview:</span><br>
+                            <span id="copy-preview">🗳️ Vote: Cafe Miko | Date: July 4-5</span>
+                        </div>
+
+                        <button onclick="copyToClipboard()" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-md">
+                            <span>📋</span> Copy My Vote Details
+                        </button>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Right Panel: Live Stats and Admin Import -->
+            <aside class="lg:col-span-5 space-y-6">
+                
+                <!-- Live Tally Dashboard -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center justify-between">
+                        <span>📊 Live Family Preferences</span>
+                        <span id="vote-count-badge" class="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">0 votes tallied</span>
+                    </h2>
+
+                    <!-- Venue Standings -->
+                    <div class="mb-6 space-y-3">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Venue Standings</h3>
+                        
+                        <!-- Cafe Miko Bar -->
+                        <div>
+                            <div class="flex justify-between text-xs font-medium mb-1">
+                                <span class="text-slate-700">Cafe Miko</span>
+                                <span id="venue-tally-miko" class="text-slate-900 font-bold">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div id="venue-bar-miko" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Good Home Bar -->
+                        <div>
+                            <div class="flex justify-between text-xs font-medium mb-1">
+                                <span class="text-slate-700">The Good Home</span>
+                                <span id="venue-tally-good" class="text-slate-900 font-bold">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div id="venue-bar-good" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Lone Star Bar -->
+                        <div>
+                            <div class="flex justify-between text-xs font-medium mb-1">
+                                <span class="text-slate-700">Lone Star</span>
+                                <span id="venue-tally-lone" class="text-slate-900 font-bold">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div id="venue-bar-lone" class="bg-amber-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Date Standings -->
+                    <div class="space-y-3">
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Weekend Availability</h3>
+                        
+                        <!-- July 4-5 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-medium mb-1">
+                                <span class="text-slate-700">July 4-5</span>
+                                <span id="date-tally-1" class="text-slate-900 font-bold">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-1.5">
+                                <div id="date-bar-1" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- July 11-12 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-medium mb-1">
+                                <span class="text-slate-700">July 11-12</span>
+                                <span id="date-tally-2" class="text-slate-900 font-bold">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-1.5">
+                                <div id="date-bar-2" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- July 18-19 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-medium mb-1">
+                                <span class="text-slate-700">July 18-19</span>
+                                <span id="date-tally-3" class="text-slate-900 font-bold">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-1.5">
+                                <div id="date-bar-3" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- July 25-26 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-medium mb-1">
+                                <span class="text-slate-700">July 25-26</span>
+                                <span id="date-tally-4" class="text-slate-900 font-bold">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-1.5">
+                                <div id="date-bar-4" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Organizer Board: Auto-Importer from FB comments -->
+                <div class="bg-slate-100 p-6 rounded-2xl border border-slate-200">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl">🛠️</span>
+                        <h3 class="font-bold text-slate-900 text-sm">Organizer Dashboard</h3>
+                    </div>
+                    <p class="text-xs text-slate-600 mb-4">
+                        Copy comments from your Facebook group and paste them here. The engine will automatically update the charts above in real-time!
+                    </p>
+
+                    <textarea id="import-box" placeholder="Example comments:&#10;Uncle Dave: Cafe Miko on July 11-12 works&#10;Sarah: The Good Home looks nice on 4-5th July" rows="4" class="w-full rounded-xl bg-white border-slate-200 border p-3 text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mb-3 font-mono"></textarea>
+
+                    <div class="flex gap-2">
+                        <button onclick="processImportedComments()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 px-3 rounded-lg text-xs transition duration-150">
+                            Auto-Import Votes
+                        </button>
+                        <button onclick="clearToInitialMock()" class="border border-slate-300 hover:bg-slate-200 text-slate-700 font-medium py-2 px-3 rounded-lg text-xs transition duration-150">
+                            Reset Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Simple list of notes gathered from votes -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-900 text-sm mb-3">📋 Gathered Comments & Notes</h3>
+                    <ul id="family-notes-list" class="space-y-2 text-xs text-slate-600 max-h-40 overflow-y-auto pr-1">
+                        <!-- Dynamic items injected here -->
+                    </ul>
+                </div>
+
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Core In-Memory State
+        let votesDatabase = [
+            { venue: "Cafe Miko", weekend: "July 4-5", notes: "Need a spot that Grandpa can navigate easily." },
+            { venue: "Cafe Miko", weekend: "July 11-12", notes: "" },
+            { venue: "Lone Star", weekend: "July 4-5", notes: "The 12yo says they are dying for ribs!" },
+            { venue: "The Good Home", weekend: "July 18-19", notes: "" },
+            { venue: "Cafe Miko", weekend: "July 25-26", notes: "" },
+            { venue: "The Good Home", weekend: "July 4-5", notes: "Waihi family prefers Takanini close to motorway." }
         ];
 
-        return {
-            width,
-            style: {
-                fontSize: "12px",
-                fontFamily: "inherit",
-                background: "transparent"
-            },
-            color: {
-                domain: ["Venue Popularity", "Date Availability"],
-                range: [WH.getColor('--chart-1'), WH.getColor('--chart-2')]
-            },
-            x: { 
-                label: "Number of Votes →", 
-                grid: true,
-                ticks: Math.max(5, votes.length)
-            },
-            y: { 
-                label: null,
-                padding: 0.2
-            },
-            fy: {
-                label: null
-            },
-            marks: [
-                Plot.frame({ stroke: WH.getColor('--stroke-subtle'), strokeOpacity: 0.2 }),
-                
-                Plot.barX(chartData, Plot.groupY(
-                    { x: "count" }, 
-                    { 
-                        y: "item", 
-                        fy: "group", 
-                        fill: "group", 
-                        sort: { y: "x", reverse: true },
-                        tip: true,
-                        rx: 4 
-                    }
-                )),
-                
-                Plot.text(chartData, Plot.groupY(
-                    { x: "count", text: "count" },
-                    {
-                        y: "item",
-                        fy: "group",
-                        dx: 12,
-                        textAnchor: "start",
-                        fontWeight: "bold",
-                        fill: WH.getColor('--on-surface-default')
-                    }
-                ))
-            ]
-        };
-    });
-};
+        // Backup copy to reset state
+        const initialMockData = JSON.parse(JSON.stringify(votesDatabase));
 
-// Start initialization as soon as window and WH libraries are fully ready
-if (typeof WH !== 'undefined') {
-    initApp();
-} else {
-    window.addEventListener('DOMContentLoaded', () => {
-        if (typeof WH !== 'undefined') {
-            initApp();
-        } else {
-            // High-frequency polling backup to catch late-attaching window dependencies
-            const checkInterval = setInterval(() => {
-                if (typeof WH !== 'undefined') {
-                    clearInterval(checkInterval);
-                    initApp();
-                }
-            }, 15);
+        // Display Toast Notification Helper
+        function showToast(msg, icon = "📋") {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            document.getElementById('toast-icon').textContent = icon;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
         }
-    });
-}
-</script>
+
+        // Live calculation of text preview box
+        function updateFormPreview() {
+            const selectedVenueEl = document.querySelector('input[name="venue-choice"]:checked');
+            const selectedDateEl = document.querySelector('input[name="date-choice"]:checked');
+            
+            const selectedVenue = selectedVenueEl ? selectedVenueEl.value : "Cafe Miko";
+            const selectedDate = selectedDateEl ? selectedDateEl.value : "July 4-5";
+            const notesText = document.getElementById('notes-input').value.trim();
+
+            let copyString = `🗳️ Vote: ${selectedVenue} | Date: ${selectedDate}`;
+            if (notesText) {
+                copyString += ` | Notes: ${notesText}`;
+            }
+
+            document.getElementById('copy-preview').textContent = copyString;
+        }
+
+        // Clipboard writing helper
+        function copyToClipboard() {
+            const textToCopy = document.getElementById('copy-preview').textContent;
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast("Copied to clipboard! Now paste in Facebook comments.", "✨");
+            } catch (err) {
+                showToast("Could not copy automatically. Select text in preview box!", "❌");
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // Tally database stats & update DOM element progress bars
+        function renderStatistics() {
+            const total = votesDatabase.length;
+            document.getElementById('vote-count-badge').textContent = `${total} votes tallied`;
+
+            // Tallies
+            const venueTallies = { "Cafe Miko": 0, "The Good Home": 0, "Lone Star": 0 };
+            const dateTallies = { "July 4-5": 0, "July 11-12": 0, "July 18-19": 0, "July 25-26": 0 };
+
+            // Reset comments list
+            const notesContainer = document.getElementById('family-notes-list');
+            notesContainer.innerHTML = '';
+
+            votesDatabase.forEach(vote => {
+                if (venueTallies[vote.venue] !== undefined) venueTallies[vote.venue]++;
+                if (dateTallies[vote.weekend] !== undefined) dateTallies[vote.weekend]++;
+                
+                // Print comment to DOM if exist
+                if (vote.notes && vote.notes.trim() !== "") {
+                    const li = document.createElement('li');
+                    li.className = "border-b border-slate-50 pb-1.5";
+                    li.innerHTML = `"${vote.notes}" <span class="text-indigo-500 text-[10px] font-semibold">(${vote.venue})</span>`;
+                    notesContainer.appendChild(li);
+                }
+            });
+
+            // Update Venue GUI
+            const mikoPct = total > 0 ? (venueTallies["Cafe Miko"] / total) * 100 : 0;
+            const goodPct = total > 0 ? (venueTallies["The Good Home"] / total) * 100 : 0;
+            const lonePct = total > 0 ? (venueTallies["Lone Star"] / total) * 100 : 0;
+
+            document.getElementById('venue-tally-miko').textContent = `${venueTallies["Cafe Miko"]} vote${venueTallies["Cafe Miko"] === 1 ? '' : 's'}`;
+            document.getElementById('venue-bar-miko').style.width = `${mikoPct}%`;
+
+            document.getElementById('venue-tally-good').textContent = `${venueTallies["The Good Home"]} vote${venueTallies["The Good Home"] === 1 ? '' : 's'}`;
+            document.getElementById('venue-bar-good').style.width = `${goodPct}%`;
+
+            document.getElementById('venue-tally-lone').textContent = `${venueTallies["Lone Star"]} vote${venueTallies["Lone Star"] === 1 ? '' : 's'}`;
+            document.getElementById('venue-bar-lone').style.width = `${lonePct}%`;
+
+            // Update Date GUI
+            const d1Pct = total > 0 ? (dateTallies["July 4-5"] / total) * 100 : 0;
+            const d2Pct = total > 0 ? (dateTallies["July 11-12"] / total) * 100 : 0;
+            const d3Pct = total > 0 ? (dateTallies["July 18-19"] / total) * 100 : 0;
+            const d4Pct = total > 0 ? (dateTallies["July 25-26"] / total) * 100 : 0;
+
+            document.getElementById('date-tally-1').textContent = `${dateTallies["July 4-5"]} vote${dateTallies["July 4-5"] === 1 ? '' : 's'}`;
+            document.getElementById('date-bar-1').style.width = `${d1Pct}%`;
+
+            document.getElementById('date-tally-2').textContent = `${dateTallies["July 11-12"]} vote${dateTallies["July 11-12"] === 1 ? '' : 's'}`;
+            document.getElementById('date-bar-2').style.width = `${d2Pct}%`;
+
+            document.getElementById('date-tally-3').textContent = `${dateTallies["July 18-19"]} vote${dateTallies["July 18-19"] === 1 ? '' : 's'}`;
+            document.getElementById('date-bar-3').style.width = `${d3Pct}%`;
+
+            document.getElementById('date-tally-4').textContent = `${dateTallies["July 25-26"]} vote${dateTallies["July 25-26"] === 1 ? '' : 's'}`;
+            document.getElementById('date-bar-4').style.width = `${d4Pct}%`;
+        }
+
+        // Smart parser utilizing regular expressions
+        function processImportedComments() {
+            const rawText = document.getElementById('import-box').value;
+            if (!rawText.trim()) {
+                showToast("Please paste some comment text first!", "⚠️");
+                return;
+            }
+
+            const lines = rawText.split('\n');
+            const importedVotes = [];
+
+            lines.forEach(line => {
+                if (!line.trim()) return;
+
+                let matchedVenue = null;
+                if (/miko|botanic|garden/i.test(line)) {
+                    matchedVenue = "Cafe Miko";
+                } else if (/good|home|takanini|pub/i.test(line)) {
+                    matchedVenue = "The Good Home";
+                } else if (/lone|star|steak|manukau/i.test(line)) {
+                    matchedVenue = "Lone Star";
+                }
+
+                let matchedDate = null;
+                if (/4-5|july 4|weekend 1|weekend one/i.test(line)) {
+                    matchedDate = "July 4-5";
+                } else if (/11-12|july 11|weekend 2|weekend two/i.test(line)) {
+                    matchedDate = "July 11-12";
+                } else if (/18-19|july 18|weekend 3|weekend three/i.test(line)) {
+                    matchedDate = "July 18-19";
+                } else if (/25-26|july 25|weekend 4|weekend four/i.test(line)) {
+                    matchedDate = "July 25-26";
+                }
+
+                let note = "";
+                const noteMatch = line.match(/(?:notes:|note:|dietary:|req:)(.*)$/i);
+                if (noteMatch) {
+                    note = noteMatch[1].trim();
+                } else {
+                    const cleanedLine = line.replace(/vote:|date:/gi, '').trim();
+                    if (cleanedLine.length > 15) {
+                        note = cleanedLine;
+                    }
+                }
+
+                if (matchedVenue || matchedDate) {
+                    importedVotes.push({
+                        venue: matchedVenue || "Cafe Miko",
+                        weekend: matchedDate || "July 4-5",
+                        notes: note || "Imported preference"
+                    });
+                }
+            });
+
+            if (importedVotes.length > 0) {
+                votesDatabase = [...votesDatabase, ...importedVotes];
+                document.getElementById('import-box').value = '';
+                renderStatistics();
+                showToast(`Success! Imported ${importedVotes.length} family votes.`, "📈");
+            } else {
+                showToast("Could not recognize venue or date words. Check sample formatting!", "⚠️");
+            }
+        }
+
+        // Reset database handler
+        function clearToInitialMock() {
+            votesDatabase = JSON.parse(JSON.stringify(initialMockData));
+            renderStatistics();
+            showToast("Reset to initial mock votes.", "🔄");
+        }
+
+        // Safe loader triggers after DOM tree building completes
+        document.addEventListener('DOMContentLoaded', () => {
+            updateFormPreview();
+            renderStatistics();
+        });
+    </script>
 </body>
 </html>
