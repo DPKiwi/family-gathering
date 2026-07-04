@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Lunch Planner - July 2026</title>
+    <title>Family Lunch Planner - July/August 2026</title>
     <!-- Tailwind CSS for modern utility styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
         <!-- Header Hero Section -->
         <header class="text-center mb-10">
             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 mb-3">
-                📅 July 2026 Gathering
+                📅 July & August 2026 Gathering
             </span>
             <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
                 Family Lunch Coordinator
@@ -112,33 +112,39 @@
                 <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                     <div class="flex items-center gap-2 mb-4">
                         <span class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">2</span>
-                        <h2 class="text-lg font-bold text-slate-900">Preferred Weekend in July</h2>
+                        <h2 class="text-lg font-bold text-slate-900">Preferred Weekend</h2>
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <!-- Date Option 1 -->
                         <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
-                            <input type="radio" name="date-choice" value="July 4-5" class="sr-only" checked onchange="updateFormPreview()">
-                            <span class="block text-sm font-semibold text-slate-900">July 4-5</span>
+                            <input type="radio" name="date-choice" value="July 11-12" class="sr-only" checked onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">July 11-12</span>
                             <span class="block text-xs text-slate-500 mt-1">Weekend One</span>
                         </label>
                         <!-- Date Option 2 -->
                         <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
-                            <input type="radio" name="date-choice" value="July 11-12" class="sr-only" onchange="updateFormPreview()">
-                            <span class="block text-sm font-semibold text-slate-900">July 11-12</span>
+                            <input type="radio" name="date-choice" value="July 18-19" class="sr-only" onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">July 18-19</span>
                             <span class="block text-xs text-slate-500 mt-1">Weekend Two</span>
                         </label>
                         <!-- Date Option 3 -->
                         <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
-                            <input type="radio" name="date-choice" value="July 18-19" class="sr-only" onchange="updateFormPreview()">
-                            <span class="block text-sm font-semibold text-slate-900">July 18-19</span>
+                            <input type="radio" name="date-choice" value="July 25-26" class="sr-only" onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">July 25-26</span>
                             <span class="block text-xs text-slate-500 mt-1">Weekend Three</span>
                         </label>
                         <!-- Date Option 4 -->
                         <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
-                            <input type="radio" name="date-choice" value="July 25-26" class="sr-only" onchange="updateFormPreview()">
-                            <span class="block text-sm font-semibold text-slate-900">July 25-26</span>
+                            <input type="radio" name="date-choice" value="August 1-2" class="sr-only" onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">August 1-2</span>
                             <span class="block text-xs text-slate-500 mt-1">Weekend Four</span>
+                        </label>
+                        <!-- Date Option 5 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50 col-span-2">
+                            <input type="radio" name="date-choice" value="August 8-9" class="sr-only" onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">August 8-9</span>
+                            <span class="block text-xs text-slate-500 mt-1">Weekend Five</span>
                         </label>
                     </div>
                 </section>
@@ -162,7 +168,7 @@
                         <!-- Visual representation of what will be copied -->
                         <div class="bg-slate-800 p-3 rounded-lg text-xs font-mono text-indigo-300 border border-slate-700/50 mb-4 break-words">
                             <span class="text-slate-400">Preview:</span><br>
-                            <span id="copy-preview">🗳️ Vote: Cafe Miko | Date: July 4-5</span>
+                            <span id="copy-preview">🗳️ Vote: Cafe Miko | Date: July 11-12</span>
                         </div>
 
                         <button onclick="copyToClipboard()" class="w-full bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-md">
@@ -224,10 +230,10 @@
                     <div class="space-y-3">
                         <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Weekend Availability</h3>
                         
-                        <!-- July 4-5 -->
+                        <!-- July 11-12 -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700">July 4-5</span>
+                                <span class="text-slate-700">July 11-12</span>
                                 <span id="date-tally-1" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-1.5">
@@ -235,10 +241,10 @@
                             </div>
                         </div>
 
-                        <!-- July 11-12 -->
+                        <!-- July 18-19 -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700">July 11-12</span>
+                                <span class="text-slate-700">July 18-19</span>
                                 <span id="date-tally-2" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-1.5">
@@ -246,10 +252,10 @@
                             </div>
                         </div>
 
-                        <!-- July 18-19 -->
+                        <!-- July 25-26 -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700">July 18-19</span>
+                                <span class="text-slate-700">July 25-26</span>
                                 <span id="date-tally-3" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-1.5">
@@ -257,14 +263,25 @@
                             </div>
                         </div>
 
-                        <!-- July 25-26 -->
+                        <!-- August 1-2 -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700">July 25-26</span>
+                                <span class="text-slate-700">August 1-2</span>
                                 <span id="date-tally-4" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-1.5">
                                 <div id="date-bar-4" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- August 8-9 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-medium mb-1">
+                                <span class="text-slate-700">August 8-9</span>
+                                <span id="date-tally-5" class="text-slate-900 font-bold">0 votes</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-1.5">
+                                <div id="date-bar-5" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                             </div>
                         </div>
                     </div>
@@ -280,7 +297,7 @@
                         Copy comments from your Facebook group and paste them here. The engine will automatically update the charts above in real-time!
                     </p>
 
-                    <textarea id="import-box" placeholder="Example comments:&#10;Uncle Dave: Cafe Miko on July 11-12 works&#10;Sarah: The Good Home looks nice on 4-5th July" rows="4" class="w-full rounded-xl bg-white border-slate-200 border p-3 text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mb-3 font-mono"></textarea>
+                    <textarea id="import-box" placeholder="Example comments:&#10;Uncle Dave: Cafe Miko on July 11-12 works&#10;Sarah: The Good Home looks nice on August 1-2" rows="4" class="w-full rounded-xl bg-white border-slate-200 border p-3 text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mb-3 font-mono"></textarea>
 
                     <div class="flex gap-2">
                         <button onclick="processImportedComments()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 px-3 rounded-lg text-xs transition duration-150">
@@ -332,7 +349,7 @@
             const selectedDateEl = document.querySelector('input[name="date-choice"]:checked');
             
             const selectedVenue = selectedVenueEl ? selectedVenueEl.value : "Cafe Miko";
-            const selectedDate = selectedDateEl ? selectedDateEl.value : "July 4-5";
+            const selectedDate = selectedDateEl ? selectedDateEl.value : "July 11-12";
             const notesText = document.getElementById('notes-input').value.trim();
 
             let copyString = `🗳️ Vote: ${selectedVenue} | Date: ${selectedDate}`;
@@ -370,7 +387,7 @@
 
             // Tallies
             const venueTallies = { "Cafe Miko": 0, "The Good Home": 0, "Lone Star": 0 };
-            const dateTallies = { "July 4-5": 0, "July 11-12": 0, "July 18-19": 0, "July 25-26": 0 };
+            const dateTallies = { "July 11-12": 0, "July 18-19": 0, "July 25-26": 0, "August 1-2": 0, "August 8-9": 0 };
 
             // Reset comments list
             const notesContainer = document.getElementById('family-notes-list');
@@ -404,22 +421,26 @@
             document.getElementById('venue-bar-lone').style.width = `${lonePct}%`;
 
             // Update Date GUI
-            const d1Pct = total > 0 ? (dateTallies["July 4-5"] / total) * 100 : 0;
-            const d2Pct = total > 0 ? (dateTallies["July 11-12"] / total) * 100 : 0;
-            const d3Pct = total > 0 ? (dateTallies["July 18-19"] / total) * 100 : 0;
-            const d4Pct = total > 0 ? (dateTallies["July 25-26"] / total) * 100 : 0;
+            const d1Pct = total > 0 ? (dateTallies["July 11-12"] / total) * 100 : 0;
+            const d2Pct = total > 0 ? (dateTallies["July 18-19"] / total) * 100 : 0;
+            const d3Pct = total > 0 ? (dateTallies["July 25-26"] / total) * 100 : 0;
+            const d4Pct = total > 0 ? (dateTallies["August 1-2"] / total) * 100 : 0;
+            const d5Pct = total > 0 ? (dateTallies["August 8-9"] / total) * 100 : 0;
 
-            document.getElementById('date-tally-1').textContent = `${dateTallies["July 4-5"]} vote${dateTallies["July 4-5"] === 1 ? '' : 's'}`;
+            document.getElementById('date-tally-1').textContent = `${dateTallies["July 11-12"]} vote${dateTallies["July 11-12"] === 1 ? '' : 's'}`;
             document.getElementById('date-bar-1').style.width = `${d1Pct}%`;
 
-            document.getElementById('date-tally-2').textContent = `${dateTallies["July 11-12"]} vote${dateTallies["July 11-12"] === 1 ? '' : 's'}`;
+            document.getElementById('date-tally-2').textContent = `${dateTallies["July 18-19"]} vote${dateTallies["July 18-19"] === 1 ? '' : 's'}`;
             document.getElementById('date-bar-2').style.width = `${d2Pct}%`;
 
-            document.getElementById('date-tally-3').textContent = `${dateTallies["July 18-19"]} vote${dateTallies["July 18-19"] === 1 ? '' : 's'}`;
+            document.getElementById('date-tally-3').textContent = `${dateTallies["July 25-26"]} vote${dateTallies["July 25-26"] === 1 ? '' : 's'}`;
             document.getElementById('date-bar-3').style.width = `${d3Pct}%`;
 
-            document.getElementById('date-tally-4').textContent = `${dateTallies["July 25-26"]} vote${dateTallies["July 25-26"] === 1 ? '' : 's'}`;
+            document.getElementById('date-tally-4').textContent = `${dateTallies["August 1-2"]} vote${dateTallies["August 1-2"] === 1 ? '' : 's'}`;
             document.getElementById('date-bar-4').style.width = `${d4Pct}%`;
+
+            document.getElementById('date-tally-5').textContent = `${dateTallies["August 8-9"]} vote${dateTallies["August 8-9"] === 1 ? '' : 's'}`;
+            document.getElementById('date-bar-5').style.width = `${d5Pct}%`;
         }
 
         // Smart parser utilizing regular expressions
@@ -446,14 +467,16 @@
                 }
 
                 let matchedDate = null;
-                if (/4-5|july 4|weekend 1|weekend one/i.test(line)) {
-                    matchedDate = "July 4-5";
-                } else if (/11-12|july 11|weekend 2|weekend two/i.test(line)) {
+                if (/11-12|july 11|weekend 1|weekend one/i.test(line)) {
                     matchedDate = "July 11-12";
-                } else if (/18-19|july 18|weekend 3|weekend three/i.test(line)) {
+                } else if (/18-19|july 18|weekend 2|weekend two/i.test(line)) {
                     matchedDate = "July 18-19";
-                } else if (/25-26|july 25|weekend 4|weekend four/i.test(line)) {
+                } else if (/25-26|july 25|weekend 3|weekend three/i.test(line)) {
                     matchedDate = "July 25-26";
+                } else if (/1-2|august 1|aug 1|weekend 4|weekend four/i.test(line)) {
+                    matchedDate = "August 1-2";
+                } else if (/8-9|august 8|aug 8|weekend 5|weekend five/i.test(line)) {
+                    matchedDate = "August 8-9";
                 }
 
                 let note = "";
@@ -470,7 +493,7 @@
                 if (matchedVenue || matchedDate) {
                     importedVotes.push({
                         venue: matchedVenue || "Cafe Miko",
-                        weekend: matchedDate || "July 4-5",
+                        weekend: matchedDate || "July 11-12",
                         notes: note || ""
                     });
                 }
@@ -500,5 +523,4 @@
         });
     </script>
 </body>
-</html> 
- 
+</html>
