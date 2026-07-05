@@ -3,146 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Lunch Planner - Interactive Sidebar Preview</title>
-    <!-- Tailwind CSS for rich interface styling -->
+    <title>Family Lunch Planner - July/August 2026</title>
+    <!-- Tailwind CSS for modern utility styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 p-4 sm:p-8">
+<body class="h-full bg-slate-50 text-slate-800">
 
-    <div class="max-w-5xl mx-auto">
-        <header class="mb-8 border-b border-slate-200 pb-4">
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 mb-2">
-                ✨ Interactive Visualizer
+    <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        <!-- Header Hero Section -->
+        <header class="text-center mb-8">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 mb-3">
+                📅 July & August 2026 Gathering
             </span>
-            <h1 class="text-2xl font-bold text-slate-900">Side Panel & Headcount Calculator Preview</h1>
-            <p class="text-sm text-slate-600">Simulate votes on the left to see how the sidebar aggregates total headcount, adults, and kids in real-time!</p>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+                Family Lunch Coordinator
+            </h1>
+            <p class="mt-3 text-lg text-slate-600 max-w-2xl mx-auto">
+                Finding the perfect middle ground for the crew driving north from <span class="font-semibold text-emerald-600">Te Puke, Tauranga & Waihi</span> and those driving south from <span class="font-semibold text-sky-600">Kumeu</span>!
+            </p>
+            <div class="mt-4 flex flex-wrap justify-center items-center gap-3 text-sm text-slate-500">
+                <span>📍 South Auckland Meeting Point</span>
+                <span>•</span>
+                <span>👥 12 to 15 People</span>
+                <span>•</span>
+                <span id="connection-status" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
+                    <span class="h-2 w-2 rounded-full bg-slate-400 animate-pulse"></span> Connecting...
+                </span>
+            </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
-            
-            <!-- Left Panel: Simulated Vote Injector -->
-            <div class="md:col-span-5 space-y-4">
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                    <h3 class="font-bold text-slate-900 text-base mb-4 flex items-center gap-2">
-                        <span>🧪</span> Simulate a New Vote
-                    </h3>
-                    
-                    <div class="space-y-4 text-xs">
-                        <!-- Name -->
-                        <div>
-                            <label class="block font-semibold text-slate-700 mb-1">Family Group / Name</label>
-                            <input type="text" id="sim-name" value="Aunt Sarah & Uncle Dave" class="w-full rounded-lg border-slate-200 border p-2 text-xs outline-none focus:border-indigo-500">
-                        </div>
-
-                        <!-- Headcounts -->
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block font-semibold text-slate-700 mb-1">Adults (12+ yrs)</label>
-                                <select id="sim-adults" class="w-full rounded-lg border-slate-200 border p-2 text-xs outline-none bg-white">
-                                    <option value="1">1 Adult</option>
-                                    <option value="2" selected>2 Adults</option>
-                                    <option value="3">3 Adults</option>
-                                    <option value="4">4 Adults</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block font-semibold text-slate-700 mb-1">Children (<12 yrs)</label>
-                                <select id="sim-kids" class="w-full rounded-lg border-slate-200 border p-2 text-xs outline-none bg-white">
-                                    <option value="0">0 Kids</option>
-                                    <option value="1" selected>1 Child</option>
-                                    <option value="2">2 Kids</option>
-                                    <option value="3">3 Kids</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Venue -->
-                        <div>
-                            <label class="block font-semibold text-slate-700 mb-1">Preferred Spot</label>
-                            <select id="sim-venue" class="w-full rounded-lg border-slate-200 border p-2 text-xs outline-none bg-white">
-                                <option value="Cafe Miko">Cafe Miko (Botanic Gardens)</option>
-                                <option value="The Good Home">The Good Home (Takanini)</option>
-                                <option value="Lone Star">Lone Star (Manukau)</option>
-                            </select>
-                        </div>
-
-                        <!-- Date -->
-                        <div>
-                            <label class="block font-semibold text-slate-700 mb-1">Weekend</label>
-                            <select id="sim-date" class="w-full rounded-lg border-slate-200 border p-2 text-xs outline-none bg-white">
-                                <option value="July 11-12">July 11-12 (Weekend One)</option>
-                                <option value="July 18-19">July 18-19 (Weekend Two)</option>
-                                <option value="July 25-26">July 25-26 (Weekend Three)</option>
-                                <option value="August 1-2">August 1-2 (Weekend Four)</option>
-                                <option value="August 8-9">August 8-9 (Weekend Five)</option>
-                            </select>
-                        </div>
-
-                        <!-- Note -->
-                        <div>
-                            <label class="block font-semibold text-slate-700 mb-1">Notes / Requests</label>
-                            <input type="text" id="sim-notes" value="Need space for a stroller!" class="w-full rounded-lg border-slate-200 border p-2 text-xs outline-none focus:border-indigo-500">
-                        </div>
-
-                        <button onclick="injectVote()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-4 rounded-xl transition duration-150 shadow-sm flex items-center justify-center gap-1">
-                            <span>➕</span> Inject Simulation Vote
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Simulation Reset -->
-                <div class="bg-slate-100 p-4 rounded-xl border border-slate-200 flex items-center justify-between">
-                    <span class="text-xs text-slate-600">Want to start clean?</span>
-                    <button onclick="resetSimulation()" class="text-xs bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 px-3 py-1.5 rounded-lg font-medium transition">
-                        Clear Mock Data
-                    </button>
-                </div>
+        <!-- Notification Toast (Sleek replacement for window.alert) -->
+        <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+            <div class="bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+                <span id="toast-icon">📋</span>
+                <span id="toast-message" class="text-sm font-medium">Copied to clipboard!</span>
             </div>
+        </div>
 
-            <!-- Right Panel: THE LIVE SIDEBAR COMPONENT -->
-            <aside class="md:col-span-7 space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Panel: Live Cloud Voting Form -->
+            <main class="lg:col-span-7 space-y-6">
                 
-                <!-- 1. NEW ATTENDANCE HEADCOUNT CARD -->
-                <div class="bg-indigo-900 text-white p-6 rounded-2xl shadow-md relative overflow-hidden">
-                    <div class="absolute -right-6 -bottom-6 text-indigo-800 opacity-30 text-8xl font-bold select-none">
-                        👥
+                <!-- Step 1: Who are you? (Crucial for live tracking) -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">1</span>
+                        <h2 class="text-lg font-bold text-slate-900">Your Name</h2>
                     </div>
+                    <p class="text-xs text-slate-500 mb-3">Please enter your name so the family knows whose preference this is!</p>
+                    <input type="text" id="name-input" placeholder="e.g. Aunt Sarah, Cousin Dave" class="w-full rounded-xl border-slate-200 border p-3 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" oninput="updateFormPreview()">
+                </section>
+
+                <!-- Step 2: Venue Selection -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">2</span>
+                        <h2 class="text-lg font-bold text-slate-900">Choose Your Favorite Spot</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <!-- Venue Option 1 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="venue-choice" value="Cafe Miko" class="sr-only" checked onchange="updateFormPreview()">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="font-semibold text-slate-900 flex items-center gap-1.5">
+                                        Cafe Miko <span class="text-sm font-normal text-slate-500">(Botanic Gardens)</span>
+                                    </span>
+                                    <span class="mt-1 block text-xs text-slate-500">
+                                        Beautiful, scenic, bright. Great for a stroll in the fresh winter gardens.
+                                    </span>
+                                </div>
+                                <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">Relaxed</span>
+                            </div>
+                        </label>
+
+                        <!-- Venue Option 2 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="venue-choice" value="The Good Home" class="sr-only" onchange="updateFormPreview()">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="font-semibold text-slate-900 flex items-center gap-1.5">
+                                        The Good Home <span class="text-sm font-normal text-slate-500">(Takanini)</span>
+                                    </span>
+                                    <span class="mt-1 block text-xs text-slate-500">
+                                        Cozy gastropub with a heated courtyard and hearty Kiwi classic plates.
+                                    </span>
+                                </div>
+                                <span class="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-1 rounded">Cozy</span>
+                            </div>
+                        </label>
+
+                        <!-- Venue Option 3 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="venue-choice" value="Lone Star" class="sr-only" onchange="updateFormPreview()">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="font-semibold text-slate-900 flex items-center gap-1.5">
+                                        Lone Star <span class="text-sm font-normal text-slate-500">(Manukau)</span>
+                                    </span>
+                                    <span class="mt-1 block text-xs text-slate-500">
+                                        Lively, fun, big portions. Great private dining space for hungry groups.
+                                    </span>
+                                </div>
+                                <span class="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded">Lively</span>
+                            </div>
+                        </label>
+                    </div>
+                </section>
+
+                <!-- Step 3: Date Selector (5 non-passed weekends starting July 11-12) -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">3</span>
+                        <h2 class="text-lg font-bold text-slate-900">Preferred Weekend</h2>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <!-- Date Option 1 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="date-choice" value="July 11-12" class="sr-only" checked onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">July 11-12</span>
+                            <span class="block text-xs text-slate-500 mt-1">Weekend One</span>
+                        </label>
+                        <!-- Date Option 2 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="date-choice" value="July 18-19" class="sr-only" onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">July 18-19</span>
+                            <span class="block text-xs text-slate-500 mt-1">Weekend Two</span>
+                        </label>
+                        <!-- Date Option 3 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="date-choice" value="July 25-26" class="sr-only" onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">July 25-26</span>
+                            <span class="block text-xs text-slate-500 mt-1">Weekend Three</span>
+                        </label>
+                        <!-- Date Option 4 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
+                            <input type="radio" name="date-choice" value="August 1-2" class="sr-only" onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">August 1-2</span>
+                            <span class="block text-xs text-slate-500 mt-1">Weekend Four</span>
+                        </label>
+                        <!-- Date Option 5 -->
+                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50 col-span-2">
+                            <input type="radio" name="date-choice" value="August 8-9" class="sr-only" onchange="updateFormPreview()">
+                            <span class="block text-sm font-semibold text-slate-900">August 8-9</span>
+                            <span class="block text-xs text-slate-500 mt-1">Weekend Five</span>
+                        </label>
+                    </div>
+                </section>
+
+                <!-- Step 4: Special Notes -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">4</span>
+                        <h2 class="text-lg font-bold text-slate-900">Notes & Dietary Needs</h2>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-3">For example: "Grandpa needs flat walking paths" or "Kid is dairy-free"</p>
+                    <textarea id="notes-input" placeholder="Type notes here..." rows="2" class="w-full rounded-xl border-slate-200 border p-3 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500" oninput="updateFormPreview()"></textarea>
+                </section>
+
+                <!-- Action Module -->
+                <section class="bg-slate-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
                     <div class="relative z-10">
-                        <span class="uppercase tracking-wider text-[10px] font-bold text-indigo-300">Live Attendance Tally</span>
-                        <h2 class="text-2xl font-extrabold mt-1" id="total-headcount">0 People Confirmed</h2>
-                        <div class="flex gap-4 mt-3 pt-3 border-t border-indigo-800/60 text-sm">
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-indigo-300">🧑 Adults:</span>
-                                <span class="font-bold text-white text-base" id="adult-count">0</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <span class="text-indigo-300">🧒 Kids:</span>
-                                <span class="font-bold text-white text-base" id="kid-count">0</span>
-                            </div>
+                        <h3 class="font-bold text-lg mb-1">Cast Your Live Vote!</h3>
+                        <p class="text-xs text-slate-300 mb-4">Clicking the button below instantly registers your selection in the live family dashboard.</p>
+                        
+                        <!-- Visual representation of what will be saved -->
+                        <div class="bg-slate-800 p-3 rounded-lg text-xs font-mono text-indigo-300 border border-slate-700/50 mb-4 break-words">
+                            <span class="text-slate-400">Vote Preview:</span><br>
+                            <span id="copy-preview">🗳️ [Name]: Choose Spot | Date: July 11-12</span>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <button id="btn-submit-vote" onclick="submitLiveVote()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span>🚀</span> Submit Vote Live
+                            </button>
+                            <button onclick="copyToClipboard()" class="bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 py-3 px-4 rounded-xl text-xs font-medium transition duration-200 flex items-center justify-center gap-1.5">
+                                📋 Copy text format
+                            </button>
                         </div>
                     </div>
-                </div>
+                </section>
+            </main>
 
-                <!-- 2. LIVE STANDINGS (Weighted by headcount) -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
-                    <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center justify-between">
-                        <span>📊 Live Standings <span class="text-xs font-normal text-slate-500">(People-Weighted)</span></span>
-                        <span id="vote-count-badge" class="text-[11px] font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">0 inputs</span>
+            <!-- Right Panel: Live Stats and Admin Options -->
+            <aside class="lg:col-span-5 space-y-6">
+                
+                <!-- Live Tally Dashboard -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center justify-between">
+                        <span>📊 Live Family Preferences</span>
+                        <span id="vote-count-badge" class="text-xs font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">0 votes tallied</span>
                     </h2>
 
                     <!-- Venue Standings -->
                     <div class="mb-6 space-y-3">
-                        <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Preferred Spot (By Headcount)</h3>
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Venue Standings</h3>
                         
                         <!-- Cafe Miko Bar -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">Cafe Miko (Botanic Gardens)</span>
-                                <span id="venue-tally-miko" class="text-slate-900 font-bold">0 people</span>
+                                <span class="text-slate-700">Cafe Miko</span>
+                                <span id="venue-tally-miko" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-2.5">
                                 <div id="venue-bar-miko" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -152,8 +223,8 @@
                         <!-- Good Home Bar -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium font-medium">The Good Home (Takanini)</span>
-                                <span id="venue-tally-good" class="text-slate-900 font-bold">0 people</span>
+                                <span class="text-slate-700">The Good Home</span>
+                                <span id="venue-tally-good" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-2.5">
                                 <div id="venue-bar-good" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -163,8 +234,8 @@
                         <!-- Lone Star Bar -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">Lone Star (Manukau)</span>
-                                <span id="venue-tally-lone" class="text-slate-900 font-bold">0 people</span>
+                                <span class="text-slate-700">Lone Star</span>
+                                <span id="venue-tally-lone" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-2.5">
                                 <div id="venue-bar-lone" class="bg-amber-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -174,13 +245,13 @@
 
                     <!-- Date Standings -->
                     <div class="space-y-3">
-                        <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Weekend Availability (By Headcount)</h3>
+                        <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Weekend Availability</h3>
                         
                         <!-- July 11-12 -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">July 11-12</span>
-                                <span id="date-tally-1" class="text-slate-900 font-bold">0 people</span>
+                                <span class="text-slate-700">July 11-12</span>
+                                <span id="date-tally-1" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-1.5">
                                 <div id="date-bar-1" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -190,8 +261,8 @@
                         <!-- July 18-19 -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">July 18-19</span>
-                                <span id="date-tally-2" class="text-slate-900 font-bold">0 people</span>
+                                <span class="text-slate-700">July 18-19</span>
+                                <span id="date-tally-2" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-1.5">
                                 <div id="date-bar-2" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -201,8 +272,8 @@
                         <!-- July 25-26 -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">July 25-26</span>
-                                <span id="date-tally-3" class="text-slate-900 font-bold">0 people</span>
+                                <span class="text-slate-700">July 25-26</span>
+                                <span id="date-tally-3" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-1.5">
                                 <div id="date-bar-3" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -212,8 +283,8 @@
                         <!-- August 1-2 -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">August 1-2</span>
-                                <span id="date-tally-4" class="text-slate-900 font-bold">0 people</span>
+                                <span class="text-slate-700">August 1-2</span>
+                                <span id="date-tally-4" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-1.5">
                                 <div id="date-bar-4" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -223,8 +294,8 @@
                         <!-- August 8-9 -->
                         <div>
                             <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">August 8-9</span>
-                                <span id="date-tally-5" class="text-slate-900 font-bold">0 people</span>
+                                <span class="text-slate-700">August 8-9</span>
+                                <span id="date-tally-5" class="text-slate-900 font-bold">0 votes</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-1.5">
                                 <div id="date-bar-5" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
@@ -233,144 +304,433 @@
                     </div>
                 </div>
 
-                <!-- 3. COMMENTS LIST -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
-                    <h3 class="font-bold text-slate-900 text-sm mb-4">💬 Gathered Comments & Notes</h3>
-                    <ul id="family-notes-list" class="space-y-3 text-xs divide-y divide-slate-100 max-h-64 overflow-y-auto pr-1">
+                <!-- Simple list of notes gathered from votes -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                    <h3 class="font-bold text-slate-900 text-sm mb-3">📋 Gathered Comments & Notes</h3>
+                    <ul id="family-notes-list" class="space-y-2 text-xs text-slate-600 max-h-40 overflow-y-auto pr-1">
                         <!-- Dynamic items injected here -->
                     </ul>
+                </div>
+
+                <!-- Organizer Dashboard: Add Offline Votes -->
+                <div class="bg-slate-100 p-6 rounded-2xl border border-slate-200">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl">🛠️</span>
+                        <h3 class="font-bold text-slate-900 text-sm">Offline Vote Tool</h3>
+                    </div>
+                    <p class="text-xs text-slate-600 mb-4">
+                        Did an uncle text or comment instead of using the site? Paste his message below to easily record his vote into the cloud database!
+                    </p>
+
+                    <textarea id="import-box" placeholder="Example format:&#10;Uncle Dave: Cafe Miko on July 11-12 looks great&#10;Aunt Sarah: The Good Home on August 1-2" rows="3" class="w-full rounded-xl bg-white border-slate-200 border p-3 text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mb-3 font-mono"></textarea>
+
+                    <div class="flex gap-2">
+                        <button onclick="processImportedComments()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 px-3 rounded-lg text-xs transition duration-150">
+                            Add Offline Vote
+                        </button>
+                        <button onclick="clearAllVotes()" class="border border-red-300 hover:bg-red-50 text-red-700 font-medium py-2 px-3 rounded-lg text-xs transition duration-150">
+                            Reset Database
+                        </button>
+                    </div>
                 </div>
 
             </aside>
         </div>
     </div>
 
-    <!-- Live Simulation logic -->
-    <script>
-        // Start with some classic mock votes already filled in!
-        let simulatedDatabase = [
-            { name: "David", adults: 1, kids: 0, venue: "Cafe Miko", weekend: "July 25-26", notes: "Excited to meet up with everyone!", timestamp: 1 },
-            { name: "Rod & Sue", adults: 2, kids: 2, venue: "Cafe Miko", weekend: "July 11-12", notes: "Kids are excited to see the gardens.", timestamp: 2 },
-            { name: "Uncle Bruce", adults: 2, kids: 0, venue: "The Good Home", weekend: "July 11-12", notes: "Will need wheelchair accessible pathways.", timestamp: 3 }
-        ];
+    <!-- 3. Safe Firebase Imports & Logic Block -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, addDoc, getDoc, collection, query, onSnapshot, writeBatch, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // -------------------------------------------------------------
+        // 🛠️ CLOUD DATABASE CONFIGURATION
+        // Replace this with your actual Firebase project config to sync votes!
+        // -------------------------------------------------------------
+        const firebaseConfig = {
+            apiKey: "dummy-api-key",
+            authDomain: "dummy-auth-domain.firebaseapp.com",
+            projectId: "dummy-project-id",
+            storageBucket: "dummy-project-id.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+        // -------------------------------------------------------------
+        
+        const appId = 'family-lunch-planner-2026';
+        let app, db, auth;
+        let isCloudActive = false;
+        let localInMemoryVotes = []; // Resilient fallback list
+
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            isCloudActive = true;
+        } catch (e) {
+            console.warn("Could not load cloud database, entering local mode.", e);
+            isCloudActive = false;
+        }
+
+        // Global lists & options mapping
         const VENUE_OPTIONS = ["Cafe Miko", "The Good Home", "Lone Star"];
         const DATE_OPTIONS = ["July 11-12", "July 18-19", "July 25-26", "August 1-2", "August 8-9"];
 
-        function calculateStatistics() {
-            let totalInputs = simulatedDatabase.length;
-            let totalAdults = 0;
-            let totalKids = 0;
+        // Visual feedback variables
+        const statusEl = document.getElementById('connection-status');
+        const submitBtn = document.getElementById('btn-submit-vote');
 
-            // Stats tally
+        // Display Toast Notification Helper
+        function showToast(msg, icon = "📋") {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            document.getElementById('toast-icon').textContent = icon;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initialize Session and Auth
+        async function startSession() {
+            // Drop immediately to offline mode if dummy key is detected
+            if (!isCloudActive || firebaseConfig.apiKey === "dummy-api-key") {
+                setOfflineMode();
+                return;
+            }
+
+            try {
+                // Rule 3: Always authenticate first
+                const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                if (token) {
+                    await signInWithCustomToken(auth, token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                statusEl.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800";
+                statusEl.innerHTML = `<span class="h-2 w-2 rounded-full bg-emerald-500"></span> Live Cloud Active`;
+                
+                subscribeToVotes();
+            } catch (err) {
+                console.error("Auth failed, falling back offline:", err);
+                setOfflineMode();
+            }
+        }
+
+        function setOfflineMode() {
+            statusEl.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800";
+            statusEl.innerHTML = `<span class="h-2 w-2 rounded-full bg-amber-500"></span> Local Mode`;
+            renderStatistics(localInMemoryVotes);
+        }
+
+        // Rule 1 & Rule 2 compliant subscription
+        function subscribeToVotes() {
+            if (!auth.currentUser) return;
+
+            // Strict collection path matching rule
+            const votesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'votes');
+            const q = query(votesCollection);
+
+            // Fetch live collection modifications
+            onSnapshot(q, (snapshot) => {
+                const votesList = [];
+                snapshot.forEach((doc) => {
+                    votesList.push({ id: doc.id, ...doc.data() });
+                });
+                renderStatistics(votesList);
+            }, (error) => {
+                console.error("Subscription failure:", error);
+                showToast("Real-time load error. Using local mode.", "⚠️");
+                setOfflineMode();
+            });
+        }
+
+        // Write Vote Record into Database
+        async function submitLiveVote() {
+            const name = document.getElementById('name-input').value.trim();
+            const selectedVenueEl = document.querySelector('input[name="venue-choice"]:checked');
+            const selectedDateEl = document.querySelector('input[name="date-choice"]:checked');
+            const notes = document.getElementById('notes-input').value.trim();
+
+            if (!name) {
+                showToast("Please enter your name first!", "⚠️");
+                document.getElementById('name-input').focus();
+                return;
+            }
+
+            const chosenVenue = selectedVenueEl ? selectedVenueEl.value : "Cafe Miko";
+            const chosenDate = selectedDateEl ? selectedDateEl.value : "July 11-12";
+
+            const votePayload = {
+                name: name,
+                venue: chosenVenue,
+                weekend: chosenDate,
+                notes: notes,
+                timestamp: Date.now()
+            };
+
+            // Toggle submission visual lock
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<span>⏳</span> Submitting...`;
+
+            if (isCloudActive && auth.currentUser && firebaseConfig.apiKey !== "dummy-api-key") {
+                try {
+                    const votesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'votes');
+                    await addDoc(votesCollection, votePayload);
+                    
+                    showToast("Your vote was saved directly to the cloud!", "✨");
+                    
+                    // Reset name & notes for potential next member on same device
+                    document.getElementById('name-input').value = "";
+                    document.getElementById('notes-input').value = "";
+                    updateFormPreview();
+                } catch (err) {
+                    console.error("Cloud saving error:", err);
+                    showToast("Cloud connection error. Attempting local save.", "⚠️");
+                    saveLocalFallback(votePayload);
+                }
+            } else {
+                saveLocalFallback(votePayload);
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<span>🚀</span> Submit Vote Live`;
+        }
+
+        function saveLocalFallback(payload) {
+            localInMemoryVotes.push(payload);
+            renderStatistics(localInMemoryVotes);
+            showToast("Saved locally to this browser tab!", "📋");
+            document.getElementById('name-input').value = "";
+            document.getElementById('notes-input').value = "";
+            updateFormPreview();
+        }
+
+        // Live calculation of text preview box
+        function updateFormPreview() {
+            const name = document.getElementById('name-input').value.trim() || "[Your Name]";
+            const selectedVenueEl = document.querySelector('input[name="venue-choice"]:checked');
+            const selectedDateEl = document.querySelector('input[name="date-choice"]:checked');
+            const notesText = document.getElementById('notes-input').value.trim();
+
+            const selectedVenue = selectedVenueEl ? selectedVenueEl.value : "Cafe Miko";
+            const selectedDate = selectedDateEl ? selectedDateEl.value : "July 11-12";
+
+            let copyString = `🗳️ ${name}: ${selectedVenue} | Date: ${selectedDate}`;
+            if (notesText) {
+                copyString += ` | Notes: ${notesText}`;
+            }
+
+            document.getElementById('copy-preview').textContent = copyString;
+        }
+
+        // Clipboard writing helper
+        function copyToClipboard() {
+            const textToCopy = document.getElementById('copy-preview').textContent;
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast("Copied vote text layout!", "✨");
+            } catch (err) {
+                showToast("Press and select the preview window text.", "❌");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Calculate Tallying stats and push into GUI elements
+        function renderStatistics(votesDatabase) {
+            const total = votesDatabase.length;
+            document.getElementById('vote-count-badge').textContent = `${total} vote${total === 1 ? '' : 's'} tallied`;
+
+            // Setup aggregate counters
             const venueTallies = { "Cafe Miko": 0, "The Good Home": 0, "Lone Star": 0 };
             const dateTallies = { "July 11-12": 0, "July 18-19": 0, "July 25-26": 0, "August 1-2": 0, "August 8-9": 0 };
 
-            // Clear comments list
+            // Clear comments listing
             const notesContainer = document.getElementById('family-notes-list');
             notesContainer.innerHTML = '';
 
-            simulatedDatabase.forEach(vote => {
-                let groupCount = parseInt(vote.adults || 0) + parseInt(vote.kids || 0);
-                totalAdults += parseInt(vote.adults || 0);
-                totalKids += parseInt(vote.kids || 0);
-
-                // Venue Tallies are now WEIGHTED by headcount
-                if (venueTallies[vote.venue] !== undefined) {
-                    venueTallies[vote.venue] += groupCount;
-                }
-                // Date Tallies are now WEIGHTED by headcount
-                if (dateTallies[vote.weekend] !== undefined) {
-                    dateTallies[vote.weekend] += groupCount;
-                }
-
-                // Render lists
-                const li = document.createElement('li');
-                li.className = "pt-2 first:pt-0";
+            votesDatabase.forEach(vote => {
+                if (venueTallies[vote.venue] !== undefined) venueTallies[vote.venue]++;
+                if (dateTallies[vote.weekend] !== undefined) dateTallies[vote.weekend]++;
                 
-                let headcountLabel = `${vote.adults} Adult${vote.adults == 1 ? '' : 's'}`;
-                if (vote.kids > 0) {
-                    headcountLabel += `, ${vote.kids} Child${vote.kids == 1 ? '' : 'ren'}`;
-                }
-
-                const displayNote = vote.notes ? `"${vote.notes}"` : "No special requests.";
-
+                // Write note to display dashboard if exists
+                const voteAuthor = vote.name || "Anonymous";
+                const displayNote = vote.notes ? `"${vote.notes}"` : "";
+                
+                const li = document.createElement('li');
+                li.className = "border-b border-slate-100 pb-2 pt-1";
                 li.innerHTML = `
-                    <div class="flex justify-between font-bold text-slate-800">
-                        <span>👤 ${vote.name} <span class="font-normal text-[10px] text-slate-500 bg-slate-100 py-0.5 px-2 rounded-full ml-1">${headcountLabel}</span></span>
-                        <span class="text-indigo-600 text-[10px] bg-indigo-50 px-2 py-0.5 rounded font-semibold">${vote.weekend}</span>
+                    <div class="flex justify-between font-semibold text-slate-800">
+                        <span>👤 ${voteAuthor}</span>
+                        <span class="text-indigo-600 text-[10px] bg-indigo-50 px-1.5 py-0.5 rounded">${vote.weekend}</span>
                     </div>
-                    <div class="text-[11px] text-slate-500 mt-1 flex justify-between gap-4">
-                        <span>📍 Choice: <span class="font-semibold text-slate-700">${vote.venue}</span></span>
-                        <span class="italic text-slate-400 max-w-[200px] truncate text-right">${displayNote}</span>
+                    <div class="text-[10px] text-slate-500 mt-0.5 flex justify-between">
+                        <span>📍 ${vote.venue}</span>
+                        <span class="italic text-slate-400 max-w-[150px] truncate">${displayNote}</span>
                     </div>
                 `;
                 notesContainer.appendChild(li);
             });
 
-            // Total Headcount updates
-            let totalCount = totalAdults + totalKids;
-            document.getElementById('total-headcount').textContent = `${totalCount} Person${totalCount == 1 ? '' : 's'} Confirmed`;
-            document.getElementById('adult-count').textContent = totalAdults;
-            document.getElementById('kid-count').textContent = totalKids;
-            document.getElementById('vote-count-badge').textContent = `${totalInputs} families voted`;
-
-            // Adjust Venue Bars Percentage
+            // Adjust Venue Bars Percentage and Text
             VENUE_OPTIONS.forEach(venue => {
                 const count = venueTallies[venue] || 0;
-                const pct = totalCount > 0 ? (count / totalCount) * 100 : 0;
+                const pct = total > 0 ? (count / total) * 100 : 0;
                 
                 let elementIdSuffix = "miko";
                 if (venue === "The Good Home") elementIdSuffix = "good";
                 if (venue === "Lone Star") elementIdSuffix = "lone";
 
-                document.getElementById(`venue-tally-${elementIdSuffix}`).textContent = `${count} seat${count === 1 ? '' : 's'}`;
+                document.getElementById(`venue-tally-${elementIdSuffix}`).textContent = `${count} vote${count === 1 ? '' : 's'}`;
                 document.getElementById(`venue-bar-${elementIdSuffix}`).style.width = `${pct}%`;
             });
 
-            // Adjust Date Bars Percentage
+            // Adjust Date Bars Percentage and Text
             DATE_OPTIONS.forEach((dateOption, idx) => {
                 const count = dateTallies[dateOption] || 0;
-                const pct = totalCount > 0 ? (count / totalCount) * 100 : 0;
+                const pct = total > 0 ? (count / total) * 100 : 0;
                 const elementIndex = idx + 1;
 
-                document.getElementById(`date-tally-${elementIndex}`).textContent = `${count} seat${count === 1 ? '' : 's'}`;
+                document.getElementById(`date-tally-${elementIndex}`).textContent = `${count} vote${count === 1 ? '' : 's'}`;
                 document.getElementById(`date-bar-${elementIndex}`).style.width = `${pct}%`;
             });
         }
 
-        function injectVote() {
-            const name = document.getElementById('sim-name').value.trim();
-            const adults = parseInt(document.getElementById('sim-adults').value);
-            const kids = parseInt(document.getElementById('sim-kids').value);
-            const venue = document.getElementById('sim-venue').value;
-            const weekend = document.getElementById('sim-date').value;
-            const notes = document.getElementById('sim-notes').value.trim();
-
-            if (!name) {
-                alert("Please enter a name first!");
+        // Smart parser utilizing regular expressions to support offline submissions
+        async function processImportedComments() {
+            const rawText = document.getElementById('import-box').value;
+            if (!rawText.trim()) {
+                showToast("Please paste some comment text first!", "⚠️");
                 return;
             }
 
-            simulatedDatabase.push({
-                name, adults, kids, venue, weekend, notes, timestamp: Date.now()
+            const lines = rawText.split('\n');
+            const parsedQueue = [];
+
+            lines.forEach(line => {
+                if (!line.trim()) return;
+
+                // Match name before colon or dash
+                let matchedName = "Offline Family Member";
+                const nameMatch = line.match(/^([^:-]+)(?:[:-])/);
+                if (nameMatch) {
+                    matchedName = nameMatch[1].trim();
+                }
+
+                // Parse Venue Name
+                let matchedVenue = "Cafe Miko";
+                if (/miko|botanic|garden/i.test(line)) {
+                    matchedVenue = "Cafe Miko";
+                } else if (/good|home|takanini|pub/i.test(line)) {
+                    matchedVenue = "The Good Home";
+                } else if (/lone|star|steak|manukau/i.test(line)) {
+                    matchedVenue = "Lone Star";
+                }
+
+                // Parse Weekend Option
+                let matchedDate = "July 11-12";
+                if (/11-12|july 11|weekend 1|weekend one/i.test(line)) {
+                    matchedDate = "July 11-12";
+                } else if (/18-19|july 18|weekend 2|weekend two/i.test(line)) {
+                    matchedDate = "July 18-19";
+                } else if (/25-26|july 25|weekend 3|weekend three/i.test(line)) {
+                    matchedDate = "July 25-26";
+                } else if (/1-2|august 1|aug 1|weekend 4|weekend four/i.test(line)) {
+                    matchedDate = "August 1-2";
+                } else if (/8-9|august 8|aug 8|weekend 5|weekend five/i.test(line)) {
+                    matchedDate = "August 8-9";
+                }
+
+                // Clean Note Extract
+                let note = "Imported preference";
+                const noteExtract = line.replace(/vote:|date:|miko|good home|lone star/gi, '').replace(/^.*?[:\-]/, '').trim();
+                if (noteExtract.length > 5) {
+                    note = noteExtract;
+                }
+
+                parsedQueue.push({
+                    name: matchedName,
+                    venue: matchedVenue,
+                    weekend: matchedDate,
+                    notes: note,
+                    timestamp: Date.now()
+                });
             });
 
-            // Refresh preview
-            calculateStatistics();
-
-            // Clear name input for next test
-            document.getElementById('sim-name').value = '';
-            document.getElementById('sim-notes').value = '';
+            if (parsedQueue.length > 0) {
+                if (isCloudActive && auth.currentUser && firebaseConfig.apiKey !== "dummy-api-key") {
+                    try {
+                        const votesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'votes');
+                        for (let item of parsedQueue) {
+                            await addDoc(votesCollection, item);
+                        }
+                        showToast(`Successfully added ${parsedQueue.length} offline votes!`, "📈");
+                        document.getElementById('import-box').value = '';
+                    } catch (e) {
+                        console.error("Import failed:", e);
+                        showToast("Failed to upload offline votes. Try again.", "❌");
+                    }
+                } else {
+                    localInMemoryVotes = [...localInMemoryVotes, ...parsedQueue];
+                    renderStatistics(localInMemoryVotes);
+                    showToast(`Loaded ${parsedQueue.length} offline votes locally!`, "📈");
+                    document.getElementById('import-box').value = '';
+                }
+            } else {
+                showToast("Could not recognize venue or date values.", "⚠️");
+            }
         }
 
-        function resetSimulation() {
-            simulatedDatabase = [];
-            calculateStatistics();
+        // Wipe Database clean (Admin option)
+        async function clearAllVotes() {
+            const consent = confirm("Are you sure you want to completely clear out all family votes currently saved in the cloud database?");
+            if (!consent) return;
+
+            if (isCloudActive && auth.currentUser && firebaseConfig.apiKey !== "dummy-api-key") {
+                try {
+                    const votesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'votes');
+                    const snapshot = await getDocs(votesCollection);
+                    
+                    // Batch delete all records
+                    for (let doc of snapshot.docs) {
+                        await deleteDoc(doc.ref);
+                    }
+
+                    showToast("Cloud database reset successfully!", "🔄");
+                } catch (e) {
+                    console.error("Database reset failure:", e);
+                    showToast("Failed to reset database.", "❌");
+                }
+            } else {
+                localInMemoryVotes = [];
+                renderStatistics(localInMemoryVotes);
+                showToast("Reset local records successfully.", "🔄");
+            }
         }
 
-        // Run initial calculations
-        calculateStatistics();
+        // Module exports to regular scope
+        window.submitLiveVote = submitLiveVote;
+        window.processImportedComments = processImportedComments;
+        window.clearAllVotes = clearAllVotes;
+        window.copyToClipboard = copyToClipboard;
+        window.updateFormPreview = updateFormPreview;
+
+        // Initialize script sequence
+        startSession();
+        updateFormPreview();
     </script>
 </body>
-</html> 
+</html>
