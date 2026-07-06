@@ -11,12 +11,27 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+        .rating-btn.is-active-no {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+        .rating-btn.is-active-ok {
+            background-color: #e0e7ff;
+            border-color: #6366f1;
+            color: #3730a3;
+        }
+        .rating-btn.is-active-fav {
+            background-color: #fef3c7;
+            border-color: #d97706;
+            color: #92400e;
+        }
     </style>
 </head>
 <body class="h-full bg-slate-50 text-slate-800">
 
     <div class="max-w-5xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        
+
         <!-- Header Hero Section -->
         <header class="text-center mb-8">
             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 mb-3">
@@ -62,17 +77,17 @@
 
         <!-- Grid Container -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
+
             <!-- Left Panel: Live Cloud Voting Form -->
             <main class="lg:col-span-7 space-y-6">
-                
+
                 <!-- Step 1: Who are you & Headcount -->
                 <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                     <div class="flex items-center gap-2 mb-4">
                         <span class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">1</span>
                         <h2 class="text-base sm:text-lg font-bold text-slate-900">Your Family Details</h2>
                     </div>
-                    
+
                     <div class="space-y-4">
                         <!-- Name Input -->
                         <div>
@@ -106,102 +121,85 @@
                     </div>
                 </section>
 
-                <!-- Step 2: Venue Selection -->
+                <!-- Step 2: Venue Selection (multi-choice + grading) -->
                 <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <div class="flex items-center gap-2 mb-4">
+                    <div class="flex items-center gap-2 mb-1">
                         <span class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">2</span>
-                        <h2 class="text-base sm:text-lg font-bold text-slate-900">Choose Your Favorite Spot</h2>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900">Rate Every Spot</h2>
                     </div>
-                    
-                    <div class="space-y-4">
-                        <!-- Venue Option 1 -->
-                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
-                            <input type="radio" name="venue-choice" value="Cafe Miko" class="sr-only" checked onchange="updateFormPreview()">
-                            <div class="flex justify-between items-start">
+                    <p class="text-xs text-slate-500 mb-4 ml-9">Rate as many as you like — this helps us find the spot everyone's happiest with.</p>
+
+                    <div class="space-y-3" id="venue-list">
+                        <!-- Venue: Cafe Miko -->
+                        <div class="rounded-xl border border-slate-200 p-4" data-venue="Cafe Miko">
+                            <div class="flex justify-between items-start mb-3">
                                 <div>
                                     <span class="font-semibold text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
                                         Cafe Miko <span class="text-xs sm:text-sm font-normal text-slate-500">(Botanic Gardens)</span>
                                     </span>
-                                    <span class="mt-1 block text-xs text-slate-500">
-                                        Beautiful, scenic, bright. Great for a stroll in the fresh winter gardens.
-                                    </span>
+                                    <span class="mt-1 block text-xs text-slate-500">Beautiful, scenic, bright. Great for a stroll in the fresh winter gardens.</span>
                                 </div>
-                                <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded">Relaxed</span>
+                                <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded whitespace-nowrap">Relaxed</span>
                             </div>
-                        </label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setVenueRating('Cafe Miko', 0, this)">🚫 Not for us</button>
+                                <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setVenueRating('Cafe Miko', 1, this)">🙂 Works</button>
+                                <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setVenueRating('Cafe Miko', 2, this)">⭐ Favorite</button>
+                            </div>
+                        </div>
 
-                        <!-- Venue Option 2 -->
-                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
-                            <input type="radio" name="venue-choice" value="The Good Home" class="sr-only" onchange="updateFormPreview()">
-                            <div class="flex justify-between items-start">
+                        <!-- Venue: The Good Home -->
+                        <div class="rounded-xl border border-slate-200 p-4" data-venue="The Good Home">
+                            <div class="flex justify-between items-start mb-3">
                                 <div>
                                     <span class="font-semibold text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
                                         The Good Home <span class="text-xs sm:text-sm font-normal text-slate-500">(Takanini)</span>
                                     </span>
-                                    <span class="mt-1 block text-xs text-slate-500">
-                                        Cozy gastropub with a heated courtyard and hearty Kiwi classic plates.
-                                    </span>
+                                    <span class="mt-1 block text-xs text-slate-500">Cozy gastropub with a heated courtyard and hearty Kiwi classic plates.</span>
                                 </div>
-                                <span class="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-1 rounded">Cozy</span>
+                                <span class="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-1 rounded whitespace-nowrap">Cozy</span>
                             </div>
-                        </label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setVenueRating('The Good Home', 0, this)">🚫 Not for us</button>
+                                <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setVenueRating('The Good Home', 1, this)">🙂 Works</button>
+                                <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setVenueRating('The Good Home', 2, this)">⭐ Favorite</button>
+                            </div>
+                        </div>
 
-                        <!-- Venue Option 3 -->
-                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-4 transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
-                            <input type="radio" name="venue-choice" value="Lone Star" class="sr-only" onchange="updateFormPreview()">
-                            <div class="flex justify-between items-start">
+                        <!-- Venue: Lone Star -->
+                        <div class="rounded-xl border border-slate-200 p-4" data-venue="Lone Star">
+                            <div class="flex justify-between items-start mb-3">
                                 <div>
                                     <span class="font-semibold text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
                                         Lone Star <span class="text-xs sm:text-sm font-normal text-slate-500">(Manukau)</span>
                                     </span>
-                                    <span class="mt-1 block text-xs text-slate-500">
-                                        Lively, fun, big portions. Great private dining space for hungry groups.
-                                    </span>
+                                    <span class="mt-1 block text-xs text-slate-500">Lively, fun, big portions. Great private dining space for hungry groups.</span>
                                 </div>
-                                <span class="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded">Lively</span>
+                                <span class="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded whitespace-nowrap">Lively</span>
                             </div>
-                        </label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setVenueRating('Lone Star', 0, this)">🚫 Not for us</button>
+                                <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setVenueRating('Lone Star', 1, this)">🙂 Works</button>
+                                <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setVenueRating('Lone Star', 2, this)">⭐ Favorite</button>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
-                <!-- Step 3: Date Selector (5 Sundays starting July 12) -->
+                <!-- Step 3: Date Selector (rating + Any Sunday) -->
                 <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <div class="flex items-center gap-2 mb-4">
+                    <div class="flex items-center gap-2 mb-1">
                         <span class="flex h-7 w-7 items-center justify-center rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600">3</span>
-                        <h2 class="text-base sm:text-lg font-bold text-slate-900">Preferred Sunday</h2>
+                        <h2 class="text-base sm:text-lg font-bold text-slate-900">Rate Every Sunday</h2>
                     </div>
+                    <p class="text-xs text-slate-500 mb-4 ml-9">Rate as many Sundays as you like, or just tell us any Sunday is fine!</p>
 
-                    <div class="grid grid-cols-2 gap-3 text-xs sm:text-sm">
-                        <!-- Sunday Date Option 1 -->
-                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
-                            <input type="radio" name="date-choice" value="July 12" class="sr-only" checked onchange="updateFormPreview()">
-                            <span class="block font-semibold text-slate-900">Sunday, July 12</span>
-                            <span class="block text-xs text-slate-500 mt-1">First Option</span>
-                        </label>
-                        <!-- Sunday Date Option 2 -->
-                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
-                            <input type="radio" name="date-choice" value="July 19" class="sr-only" onchange="updateFormPreview()">
-                            <span class="block font-semibold text-slate-900">Sunday, July 19</span>
-                            <span class="block text-xs text-slate-500 mt-1">Second Option</span>
-                        </label>
-                        <!-- Sunday Date Option 3 -->
-                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
-                            <input type="radio" name="date-choice" value="July 26" class="sr-only" onchange="updateFormPreview()">
-                            <span class="block font-semibold text-slate-900">Sunday, July 26</span>
-                            <span class="block text-xs text-slate-500 mt-1">Third Option</span>
-                        </label>
-                        <!-- Sunday Date Option 4 -->
-                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50">
-                            <input type="radio" name="date-choice" value="August 2" class="sr-only" onchange="updateFormPreview()">
-                            <span class="block font-semibold text-slate-900">Sunday, August 2</span>
-                            <span class="block text-xs text-slate-500 mt-1">Fourth Option</span>
-                        </label>
-                        <!-- Sunday Date Option 5 -->
-                        <label class="relative block cursor-pointer rounded-xl border border-slate-200 p-3 text-center transition hover:bg-slate-50 [&:has(input:checked)]:border-indigo-600 [&:has(input:checked)]:bg-indigo-50/50 col-span-2">
-                            <input type="radio" name="date-choice" value="August 9" class="sr-only" onchange="updateFormPreview()">
-                            <span class="block font-semibold text-slate-900">Sunday, August 9</span>
-                            <span class="block text-xs text-slate-500 mt-1">Fifth Option</span>
-                        </label>
+                    <button type="button" id="any-sunday-btn" onclick="toggleAnySunday(this)" class="w-full mb-4 rounded-xl border-2 border-dashed border-emerald-300 bg-emerald-50/60 text-emerald-800 font-semibold text-sm py-3 transition">
+                        🔀 Any Sunday works for us!
+                    </button>
+
+                    <div class="space-y-2" id="date-list">
+                        <!-- Date rows injected via template below, repeated per date -->
                     </div>
                 </section>
 
@@ -219,12 +217,12 @@
                 <section class="bg-slate-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
                     <div class="relative z-10">
                         <h3 class="font-bold text-base sm:text-lg mb-1">Cast Your Live Vote!</h3>
-                        <p class="text-xs text-slate-300 mb-4">Clicking the button below instantly registers your selection in the live family dashboard.</p>
-                        
+                        <p class="text-xs text-slate-300 mb-4">Clicking the button below instantly registers your ratings in the live family dashboard.</p>
+
                         <!-- Visual representation of what will be saved -->
                         <div class="bg-slate-800 p-3 rounded-lg text-[11px] font-mono text-indigo-300 border border-slate-700/50 mb-4 break-words">
                             <span class="text-slate-400">Vote Preview:</span><br>
-                            <span id="copy-preview">🗳️ [Name]: Choose Spot | Date: Sunday, July 12</span>
+                            <span id="copy-preview">🗳️ [Name]: rate venues & Sundays above</span>
                         </div>
 
                         <div class="flex flex-col sm:flex-row gap-3">
@@ -241,7 +239,7 @@
 
             <!-- Right Panel: Live Stats and Admin Options -->
             <aside class="lg:col-span-5 space-y-6">
-                
+
                 <!-- Live Attendance Tally Badge -->
                 <div class="bg-indigo-900 text-white p-6 rounded-2xl shadow-md relative overflow-hidden">
                     <div class="absolute -right-6 -bottom-6 text-indigo-800 opacity-30 text-8xl font-bold select-none">
@@ -266,106 +264,21 @@
                 <!-- Live Tally Dashboard -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                     <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center justify-between">
-                        <span>📊 Live Standings <span class="text-xs font-normal text-slate-500">(People-Weighted)</span></span>
+                        <span>📊 Live Standings</span>
                         <span id="vote-count-badge" class="text-[11px] font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">0 inputs</span>
                     </h2>
 
-                    <!-- Venue Standings -->
+                    <!-- Venue Standings (rendered dynamically, ranked) -->
                     <div class="mb-6 space-y-3">
-                        <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Preferred Spot (By Headcount)</h3>
-                        
-                        <!-- Cafe Miko Bar -->
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700">Cafe Miko</span>
-                                <span id="venue-tally-miko" class="text-slate-900 font-bold">0 seats</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2.5">
-                                <div id="venue-bar-miko" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Good Home Bar -->
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700">The Good Home</span>
-                                <span id="venue-tally-good" class="text-slate-900 font-bold">0 seats</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2.5">
-                                <div id="venue-bar-good" class="bg-emerald-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Lone Star Bar -->
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700">Lone Star</span>
-                                <span id="venue-tally-lone" class="text-slate-900 font-bold">0 seats</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2.5">
-                                <div id="venue-bar-lone" class="bg-amber-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                        </div>
+                        <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Preferred Spot &mdash; Ranked</h3>
+                        <div id="venue-standings-list" class="space-y-3"></div>
                     </div>
 
-                    <!-- Date Standings -->
+                    <!-- Date Standings (rendered dynamically, ranked) -->
                     <div class="space-y-3">
-                        <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Sunday Availability (By Headcount)</h3>
-                        
-                        <!-- Sunday July 12 -->
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">Sunday, July 12</span>
-                                <span id="date-tally-1" class="text-slate-900 font-bold">0 seats</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-1.5">
-                                <div id="date-bar-1" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Sunday July 19 -->
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">Sunday, July 19</span>
-                                <span id="date-tally-2" class="text-slate-900 font-bold">0 seats</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-1.5">
-                                <div id="date-bar-2" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Sunday July 26 -->
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">Sunday, July 26</span>
-                                <span id="date-tally-3" class="text-slate-900 font-bold">0 seats</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-1.5">
-                                <div id="date-bar-3" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Sunday August 2 -->
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">Sunday, August 2</span>
-                                <span id="date-tally-4" class="text-slate-900 font-bold">0 seats</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-1.5">
-                                <div id="date-bar-4" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                        </div>
-
-                        <!-- Sunday August 9 -->
-                        <div>
-                            <div class="flex justify-between text-xs font-medium mb-1">
-                                <span class="text-slate-700 font-medium">Sunday, August 9</span>
-                                <span id="date-tally-5" class="text-slate-900 font-bold">0 seats</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-1.5">
-                                <div id="date-bar-5" class="bg-indigo-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
-                            </div>
-                        </div>
+                        <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Sunday Availability &mdash; Ranked</h3>
+                        <p id="flexible-count-label" class="text-[11px] text-emerald-700 font-medium hidden">🔀 0 families said any Sunday works</p>
+                        <div id="date-standings-list" class="space-y-2"></div>
                     </div>
                 </div>
 
@@ -384,10 +297,10 @@
                         <h3 class="font-bold text-slate-900 text-sm">Offline Vote Tool</h3>
                     </div>
                     <p class="text-xs text-slate-600 mb-4">
-                        Did an uncle text or comment instead of using the site? Paste his message below to automatically parse and add it on his behalf!
+                        Did an uncle text or comment instead of using the site? Paste his message below to automatically parse and add it on his behalf! Mention "favorite"/"love" for a top rating, or "any sunday" for full flexibility.
                     </p>
 
-                    <textarea id="import-box" placeholder="Example format:&#10;Uncle Dave: Cafe Miko on July 26 looks great (2 adults)&#10;Aunt Sarah: The Good Home on August 2 (2 adults, 1 kid)" rows="3" class="w-full rounded-xl bg-white border-slate-200 border p-3 text-[11px] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mb-3 font-mono"></textarea>
+                    <textarea id="import-box" placeholder="Example format:&#10;Uncle Dave: loves Cafe Miko, Lone Star also works, any Sunday fine (2 adults)&#10;Aunt Sarah: favorite is The Good Home on August 2 (2 adults, 1 kid)" rows="3" class="w-full rounded-xl bg-white border-slate-200 border p-3 text-[11px] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 mb-3 font-mono"></textarea>
 
                     <div class="flex gap-2">
                         <button onclick="processImportedComments()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 px-3 rounded-lg text-xs transition duration-150">
@@ -407,30 +320,28 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, addDoc, getDoc, collection, query, onSnapshot, writeBatch, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // -------------------------------------------------------------
         // 🛠️ CLOUD DATABASE CONFIGURATION
-        // REPLACE this with your actual Firebase project config in Step 2 of the guide to sync live!
         // -------------------------------------------------------------
         const firebaseConfig = {
-  apiKey: "AIzaSyC2pTop6fVk3F3dxeectw0Tzdn_bfrov04",
-  authDomain: "family-lunch-coordinator.firebaseapp.com",
-  projectId: "family-lunch-coordinator",
-  storageBucket: "family-lunch-coordinator.firebasestorage.app",
-  messagingSenderId: "861468394102",
-  appId: "1:861468394102:web:e3bd130c98bda52fa01557"
+            apiKey: "AIzaSyC2pTop6fVk3F3dxeectw0Tzdn_bfrov04",
+            authDomain: "family-lunch-coordinator.firebaseapp.com",
+            projectId: "family-lunch-coordinator",
+            storageBucket: "family-lunch-coordinator.firebasestorage.app",
+            messagingSenderId: "861468394102",
+            appId: "1:861468394102:web:e3bd130c98bda52fa01557"
         };
         // -------------------------------------------------------------
-        
+
         const appId = 'family-lunch-planner-2026';
         let app, db, auth;
         let isCloudActive = false;
         let localInMemoryVotes = []; // Safe backup storage array
 
         try {
-            // Check if user has entered their real firebase keys
-            if (firebaseConfig.apiKey !== "dummy-api-key") {
+            if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "dummy-api-key") {
                 app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
@@ -441,13 +352,86 @@
             isCloudActive = false;
         }
 
-        // Global arrays mapping
+        // Global option lists
         const VENUE_OPTIONS = ["Cafe Miko", "The Good Home", "Lone Star"];
         const DATE_OPTIONS = ["July 12", "July 19", "July 26", "August 2", "August 9"];
+        const RATING_LABELS = { 0: "🚫 Not for us", 1: "🙂 Works", 2: "⭐ Favorite" };
+
+        // Current in-progress vote state
+        let currentVenueRatings = { "Cafe Miko": 0, "The Good Home": 0, "Lone Star": 0 };
+        let currentDateRatings = {};
+        DATE_OPTIONS.forEach(d => currentDateRatings[d] = 0);
+        let anySundayFlag = false;
 
         // Visual layout target elements
         const statusEl = document.getElementById('connection-status');
         const submitBtn = document.getElementById('btn-submit-vote');
+
+        // ---------- Build the date rating rows (Step 3) ----------
+        function buildDateRows() {
+            const container = document.getElementById('date-list');
+            container.innerHTML = '';
+            DATE_OPTIONS.forEach(dateVal => {
+                const row = document.createElement('div');
+                row.className = "rounded-xl border border-slate-200 p-3";
+                row.setAttribute('data-date', dateVal);
+                row.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-slate-900 text-sm">Sunday, ${dateVal}</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setDateRating('${dateVal}', 0, this)">🚫 Can't</button>
+                        <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setDateRating('${dateVal}', 1, this)">🙂 Works</button>
+                        <button type="button" class="rating-btn py-2 rounded-lg text-[11px] sm:text-xs font-semibold border border-slate-200 text-slate-500 transition" onclick="setDateRating('${dateVal}', 2, this)">⭐ Preferred</button>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // ---------- Rating button visual helper ----------
+        function highlightActiveButton(groupEl, score) {
+            const buttons = groupEl.querySelectorAll('.rating-btn');
+            buttons.forEach(b => b.classList.remove('is-active-no', 'is-active-ok', 'is-active-fav'));
+            if (buttons[score]) {
+                const cls = score === 0 ? 'is-active-no' : (score === 1 ? 'is-active-ok' : 'is-active-fav');
+                buttons[score].classList.add(cls);
+            }
+        }
+
+        function setVenueRating(venue, score, btnEl) {
+            currentVenueRatings[venue] = score;
+            const group = btnEl.closest('[data-venue]').querySelector('.grid');
+            highlightActiveButton(group, score);
+            updateFormPreview();
+        }
+
+        function setDateRating(dateVal, score, btnEl) {
+            currentDateRatings[dateVal] = score;
+            const group = btnEl.closest('[data-date]').querySelector('.grid');
+            highlightActiveButton(group, score);
+            updateFormPreview();
+        }
+
+        function toggleAnySunday(btnEl) {
+            anySundayFlag = !anySundayFlag;
+            if (anySundayFlag) {
+                btnEl.classList.add('bg-emerald-600', 'text-white', 'border-emerald-500');
+                btnEl.classList.remove('border-dashed', 'bg-emerald-50/60', 'text-emerald-800', 'border-emerald-300');
+                // Bump any un-rated Sundays up to "Works" so they count, without downgrading favorites
+                DATE_OPTIONS.forEach(d => {
+                    if (currentDateRatings[d] < 1) {
+                        currentDateRatings[d] = 1;
+                        const rowEl = document.querySelector(`[data-date="${d}"] .grid`);
+                        if (rowEl) highlightActiveButton(rowEl, 1);
+                    }
+                });
+            } else {
+                btnEl.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-500');
+                btnEl.classList.add('border-dashed', 'bg-emerald-50/60', 'text-emerald-800', 'border-emerald-300');
+            }
+            updateFormPreview();
+        }
 
         // Custom UI Modal triggers to completely avoid browser alert and confirm
         function openConfirmModal() {
@@ -475,10 +459,10 @@
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').textContent = msg;
             document.getElementById('toast-icon').textContent = icon;
-            
+
             toast.classList.remove('translate-y-20', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
-            
+
             setTimeout(() => {
                 toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('translate-y-20', 'opacity-0');
@@ -491,19 +475,15 @@
                 setOfflineMode();
                 return;
             }
-
             try {
-                // Rule 3: Always authenticate before reading or writing database documents
                 const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
                 if (token) {
                     await signInWithCustomToken(auth, token);
                 } else {
                     await signInAnonymously(auth);
                 }
-
                 statusEl.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800";
                 statusEl.innerHTML = `<span class="h-2 w-2 rounded-full bg-emerald-500"></span> Live Cloud Active`;
-                
                 subscribeToVotes();
             } catch (err) {
                 console.error("Database connection refused, starting offline mode:", err);
@@ -517,15 +497,10 @@
             renderStatistics(localInMemoryVotes);
         }
 
-        // Rule 1 & Rule 2 compliant subscription
         function subscribeToVotes() {
             if (!auth.currentUser) return;
-
-            // Strict collection path rule compliance
             const votesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'votes');
             const q = query(votesCollection);
-
-            // Fetch live query collection modifications
             onSnapshot(q, (snapshot) => {
                 const votesList = [];
                 snapshot.forEach((doc) => {
@@ -539,13 +514,38 @@
             });
         }
 
+        // ---------- Normalize legacy vote records (single venue/weekend strings) ----------
+        function getVenueRatings(vote) {
+            if (vote.venueRatings) return vote.venueRatings;
+            if (vote.venue) return { [vote.venue]: 2 };
+            return {};
+        }
+        function getDateRatings(vote) {
+            if (vote.dateRatings) return vote.dateRatings;
+            if (vote.weekend) return { [vote.weekend]: 2 };
+            return {};
+        }
+
+        function resetFormState() {
+            currentVenueRatings = { "Cafe Miko": 0, "The Good Home": 0, "Lone Star": 0 };
+            DATE_OPTIONS.forEach(d => currentDateRatings[d] = 0);
+            anySundayFlag = false;
+            document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('is-active-no', 'is-active-ok', 'is-active-fav'));
+            const anyBtn = document.getElementById('any-sunday-btn');
+            anyBtn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-500');
+            anyBtn.classList.add('border-dashed', 'bg-emerald-50/60', 'text-emerald-800', 'border-emerald-300');
+            document.getElementById('name-input').value = "";
+            document.getElementById('notes-input').value = "";
+            document.getElementById('adults-input').value = "2";
+            document.getElementById('kids-input').value = "0";
+            updateFormPreview();
+        }
+
         // Save Active Choice into cloud collection
         async function submitLiveVote() {
             const name = document.getElementById('name-input').value.trim();
             const adults = parseInt(document.getElementById('adults-input').value) || 2;
             const kids = parseInt(document.getElementById('kids-input').value) || 0;
-            const selectedVenueEl = document.querySelector('input[name="venue-choice"]:checked');
-            const selectedDateEl = document.querySelector('input[name="date-choice"]:checked');
             const notes = document.getElementById('notes-input').value.trim();
 
             if (!name) {
@@ -554,20 +554,28 @@
                 return;
             }
 
-            const chosenVenue = selectedVenueEl ? selectedVenueEl.value : "Cafe Miko";
-            const chosenDate = selectedDateEl ? selectedDateEl.value : "July 12";
+            const hasVenueRating = Object.values(currentVenueRatings).some(v => v > 0);
+            const hasDateRating = Object.values(currentDateRatings).some(v => v > 0);
+            if (!hasVenueRating) {
+                showToast("Please rate at least one venue!", "⚠️");
+                return;
+            }
+            if (!hasDateRating && !anySundayFlag) {
+                showToast("Please rate a Sunday or tap 'Any Sunday works'!", "⚠️");
+                return;
+            }
 
             const votePayload = {
                 name: name,
                 adults: adults,
                 kids: kids,
-                venue: chosenVenue,
-                weekend: chosenDate,
+                venueRatings: { ...currentVenueRatings },
+                dateRatings: { ...currentDateRatings },
+                anySunday: anySundayFlag,
                 notes: notes,
                 timestamp: Date.now()
             };
 
-            // Lock visual keys during write execution
             submitBtn.disabled = true;
             submitBtn.innerHTML = `<span>⏳</span> Submitting...`;
 
@@ -575,15 +583,8 @@
                 try {
                     const votesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'votes');
                     await addDoc(votesCollection, votePayload);
-                    
-                    showToast("Your family choice was saved directly to the cloud!", "✨");
-                    
-                    // Reset input areas for potentially other members voting on the same device
-                    document.getElementById('name-input').value = "";
-                    document.getElementById('notes-input').value = "";
-                    document.getElementById('adults-input').value = "2";
-                    document.getElementById('kids-input').value = "0";
-                    updateFormPreview();
+                    showToast("Your family choices were saved directly to the cloud!", "✨");
+                    resetFormState();
                 } catch (err) {
                     console.error("Cloud writing issue:", err);
                     showToast("Cloud connection error. Attempting local save.", "⚠️");
@@ -601,35 +602,37 @@
             localInMemoryVotes.push(payload);
             renderStatistics(localInMemoryVotes);
             showToast("Saved locally to this browser tab!", "📋");
-            document.getElementById('name-input').value = "";
-            document.getElementById('notes-input').value = "";
-            document.getElementById('adults-input').value = "2";
-            document.getElementById('kids-input').value = "0";
-            updateFormPreview();
+            resetFormState();
         }
 
-        // Form Preview visual handler
+        // ---------- Preview text builder ----------
+        function summarizeRatings(ratingsObj, topLabel, okLabel) {
+            const favorites = Object.entries(ratingsObj).filter(([, v]) => v === 2).map(([k]) => k);
+            const okays = Object.entries(ratingsObj).filter(([, v]) => v === 1).map(([k]) => k);
+            if (favorites.length) return `${topLabel} ${favorites.join(', ')}`;
+            if (okays.length) return `${okLabel} ${okays.join(', ')}`;
+            return "no preference yet";
+        }
+
         function updateFormPreview() {
             const name = document.getElementById('name-input').value.trim() || "[Your Name]";
             const adults = parseInt(document.getElementById('adults-input').value) || 2;
             const kids = parseInt(document.getElementById('kids-input').value) || 0;
-            const selectedVenueEl = document.querySelector('input[name="venue-choice"]:checked');
-            const selectedDateEl = document.querySelector('input[name="date-choice"]:checked');
             const notesText = document.getElementById('notes-input').value.trim();
-
-            const selectedVenue = selectedVenueEl ? selectedVenueEl.value : "Cafe Miko";
-            const selectedDate = selectedDateEl ? selectedDateEl.value : "July 12";
 
             let headcountLabel = `${adults} Adult${adults === 1 ? '' : 's'}`;
             if (kids > 0) {
                 headcountLabel += `, ${kids} Child${kids === 1 ? '' : 'ren'}`;
             }
 
-            let copyString = `🗳️ ${name} (${headcountLabel}): ${selectedVenue} | Sunday: ${selectedDate}`;
+            const venueSummary = summarizeRatings(currentVenueRatings, "⭐ favorites:", "🙂 okay with:");
+            let dateSummary = summarizeRatings(currentDateRatings, "⭐ prefers:", "🙂 okay with:");
+            if (anySundayFlag) dateSummary += " (any Sunday is fine)";
+
+            let copyString = `🗳️ ${name} (${headcountLabel}): Venues — ${venueSummary} | Sundays — ${dateSummary}`;
             if (notesText) {
                 copyString += ` | Notes: ${notesText}`;
             }
-
             document.getElementById('copy-preview').textContent = copyString;
         }
 
@@ -641,7 +644,6 @@
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
-            
             try {
                 document.execCommand('copy');
                 showToast("Copied vote text layout!", "✨");
@@ -651,85 +653,106 @@
             document.body.removeChild(textArea);
         }
 
-        // Render Weighted Stats and Tally UI
+        // ---------- Render Weighted Stats and Ranked Standings ----------
         function renderStatistics(votesDatabase) {
             let totalInputs = votesDatabase.length;
             let totalAdults = 0;
             let totalKids = 0;
+            let flexibleFamilies = 0;
 
-            // Stats tally weighted directly by headcount size
-            const venueTallies = { "Cafe Miko": 0, "The Good Home": 0, "Lone Star": 0 };
-            const dateTallies = { "July 12": 0, "July 19": 0, "July 26": 0, "August 2": 0, "August 9": 0 };
+            const venueScores = { "Cafe Miko": 0, "The Good Home": 0, "Lone Star": 0 };
+            const dateScores = {};
+            DATE_OPTIONS.forEach(d => dateScores[d] = 0);
 
             const notesContainer = document.getElementById('family-notes-list');
             notesContainer.innerHTML = '';
 
             votesDatabase.forEach(vote => {
-                let groupCount = parseInt(vote.adults || 0) + parseInt(vote.kids || 0);
+                const groupCount = parseInt(vote.adults || 0) + parseInt(vote.kids || 0);
                 totalAdults += parseInt(vote.adults || 0);
                 totalKids += parseInt(vote.kids || 0);
+                if (vote.anySunday) flexibleFamilies += 1;
 
-                if (venueTallies[vote.venue] !== undefined) {
-                    venueTallies[vote.venue] += groupCount;
-                }
-                if (dateTallies[vote.weekend] !== undefined) {
-                    dateTallies[vote.weekend] += groupCount;
-                }
-                
-                // Construct comment label list items
+                const vRatings = getVenueRatings(vote);
+                Object.entries(vRatings).forEach(([venue, score]) => {
+                    if (venueScores[venue] !== undefined) venueScores[venue] += (score * groupCount);
+                });
+
+                const dRatings = getDateRatings(vote);
+                Object.entries(dRatings).forEach(([dateVal, score]) => {
+                    if (dateScores[dateVal] !== undefined) dateScores[dateVal] += (score * groupCount);
+                });
+
                 const voteAuthor = vote.name || "Anonymous";
                 let sizeLabel = `${vote.adults || 2}A`;
                 if (vote.kids > 0) sizeLabel += `, ${vote.kids}C`;
 
+                const topVenues = Object.entries(vRatings).filter(([, s]) => s === 2).map(([k]) => k);
+                const venueLabel = topVenues.length ? topVenues.join(', ') : (Object.keys(vRatings)[0] || '—');
+                const topDates = Object.entries(dRatings).filter(([, s]) => s === 2).map(([k]) => k);
+                let dateLabel = topDates.length ? topDates.join(', ') : (Object.keys(dRatings)[0] || '—');
+                if (vote.anySunday) dateLabel += ' (any Sunday ok)';
+
                 const displayNote = vote.notes ? `"${vote.notes}"` : "";
-                
+
                 const li = document.createElement('li');
                 li.className = "py-2 first:pt-0";
                 li.innerHTML = `
                     <div class="flex justify-between font-bold text-slate-800">
                         <span>👤 ${voteAuthor} <span class="font-normal text-[9px] text-slate-500 bg-slate-100 py-0.5 px-2 rounded-full ml-1">${sizeLabel}</span></span>
-                        <span class="text-indigo-600 text-[10px] bg-indigo-50 px-1.5 py-0.5 rounded font-semibold">Sunday, ${vote.weekend}</span>
+                        <span class="text-indigo-600 text-[10px] bg-indigo-50 px-1.5 py-0.5 rounded font-semibold text-right">${dateLabel}</span>
                     </div>
                     <div class="text-[10px] text-slate-500 mt-1 flex justify-between gap-4">
-                        <span>📍 choice: <span class="font-semibold text-slate-700">${vote.venue}</span></span>
+                        <span>📍 top pick: <span class="font-semibold text-slate-700">${venueLabel}</span></span>
                         <span class="italic text-slate-400 max-w-[150px] truncate text-right">${displayNote}</span>
                     </div>
                 `;
                 notesContainer.appendChild(li);
             });
 
-            // Calculate aggregate numbers
             let totalCount = totalAdults + totalKids;
             document.getElementById('total-headcount').textContent = `${totalCount} Person${totalCount === 1 ? '' : 's'} Confirmed`;
             document.getElementById('adult-count').textContent = totalAdults;
             document.getElementById('kid-count').textContent = totalKids;
             document.getElementById('vote-count-badge').textContent = `${totalInputs} families voted`;
 
-            // Adjust Venue Bars Percentage
-            VENUE_OPTIONS.forEach(venue => {
-                const count = venueTallies[venue] || 0;
-                const pct = totalCount > 0 ? (count / totalCount) * 100 : 0;
-                
-                let elementIdSuffix = "miko";
-                if (venue === "The Good Home") elementIdSuffix = "good";
-                if (venue === "Lone Star") elementIdSuffix = "lone";
+            const flexLabel = document.getElementById('flexible-count-label');
+            if (flexibleFamilies > 0) {
+                flexLabel.textContent = `🔀 ${flexibleFamilies} famil${flexibleFamilies === 1 ? 'y' : 'ies'} said any Sunday works`;
+                flexLabel.classList.remove('hidden');
+            } else {
+                flexLabel.classList.add('hidden');
+            }
 
-                document.getElementById(`venue-tally-${elementIdSuffix}`).textContent = `${count} seat${count === 1 ? '' : 's'}`;
-                document.getElementById(`venue-bar-${elementIdSuffix}`).style.width = `${pct}%`;
-            });
+            renderRankedList('venue-standings-list', venueScores, ['bg-indigo-600', 'bg-emerald-500', 'bg-amber-500']);
+            renderRankedList('date-standings-list', dateScores, ['bg-indigo-400'], true);
+        }
 
-            // Adjust Date Bars Percentage
-            DATE_OPTIONS.forEach((dateOption, idx) => {
-                const count = dateTallies[dateOption] || 0;
-                const pct = totalCount > 0 ? (count / totalCount) * 100 : 0;
-                const elementIndex = idx + 1;
+        function renderRankedList(containerId, scoresObj, barColors, isDate = false) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            const entries = Object.entries(scoresObj).sort((a, b) => b[1] - a[1]);
+            const maxScore = entries.length ? entries[0][1] : 0;
 
-                document.getElementById(`date-tally-${elementIndex}`).textContent = `${count} seat${count === 1 ? '' : 's'}`;
-                document.getElementById(`date-bar-${elementIndex}`).style.width = `${pct}%`;
+            entries.forEach(([label, score], idx) => {
+                const pct = maxScore > 0 ? (score / maxScore) * 100 : 0;
+                const color = barColors[idx % barColors.length];
+                const isLeader = idx === 0 && score > 0;
+                const wrap = document.createElement('div');
+                wrap.innerHTML = `
+                    <div class="flex justify-between text-xs font-medium mb-1">
+                        <span class="text-slate-700 flex items-center gap-1">${isLeader ? '🏆' : ''} ${isDate ? 'Sunday, ' : ''}${label}</span>
+                        <span class="text-slate-900 font-bold">${score} pt${score === 1 ? '' : 's'}</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full ${isDate ? 'h-1.5' : 'h-2.5'}">
+                        <div class="${color} ${isDate ? 'h-1.5' : 'h-2.5'} rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                    </div>
+                `;
+                container.appendChild(wrap);
             });
         }
 
-        // Smart parser to aggregate offline messaging formats (Updated for Sundays!)
+        // ---------- Offline / Facebook comment parser ----------
         async function processImportedComments() {
             const rawText = document.getElementById('import-box').value;
             if (!rawText.trim()) {
@@ -743,59 +766,55 @@
             lines.forEach(line => {
                 if (!line.trim()) return;
 
-                // Match name preceding a colon or dash
                 let matchedName = "Offline Family Member";
                 const nameMatch = line.match(/^([^:-]+)(?:[:-])/);
-                if (nameMatch) {
-                    matchedName = nameMatch[1].trim();
-                }
+                if (nameMatch) matchedName = nameMatch[1].trim();
 
-                // Extract headcount size indicators (e.g. 2 adults, 1 kid)
                 let adults = 2;
                 let kids = 0;
-                const adultMatch = line.match(/(\d+)\s*(?:adult|A)/i);
-                const kidMatch = line.match(/(\d+)\s*(?:kid|child|children|C)/i);
-
+                const adultMatch = line.match(/(\d+)\s*(?:adult|A\b)/i);
+                const kidMatch = line.match(/(\d+)\s*(?:kid|child|children|C\b)/i);
                 if (adultMatch) adults = parseInt(adultMatch[1]);
                 if (kidMatch) kids = parseInt(kidMatch[1]);
 
-                // Match preferred venue
-                let matchedVenue = "Cafe Miko";
-                if (/miko|botanic|garden/i.test(line)) {
-                    matchedVenue = "Cafe Miko";
-                } else if (/good|home|takanini|pub/i.test(line)) {
-                    matchedVenue = "The Good Home";
-                } else if (/lone|star|manukau/i.test(line)) {
-                    matchedVenue = "Lone Star";
+                const strongWord = /love|favorite|favourite|best/i.test(line);
+
+                // Detect every venue mentioned in the line, each gets its own rating
+                const venueRatings = {};
+                if (/miko|botanic|garden/i.test(line)) venueRatings["Cafe Miko"] = strongWord ? 2 : 1;
+                if (/good home|takanini|pub/i.test(line)) venueRatings["The Good Home"] = strongWord ? 2 : 1;
+                if (/lone star|manukau/i.test(line)) venueRatings["Lone Star"] = strongWord ? 2 : 1;
+
+                // Detect "any sunday" flexibility
+                const anySunday = /any sunday|any date|whatever works|flexible/i.test(line);
+
+                // Detect every specific Sunday mentioned
+                const dateRatings = {};
+                if (/july\s*12/i.test(line)) dateRatings["July 12"] = strongWord ? 2 : 1;
+                if (/july\s*19/i.test(line)) dateRatings["July 19"] = strongWord ? 2 : 1;
+                if (/july\s*26/i.test(line)) dateRatings["July 26"] = strongWord ? 2 : 1;
+                if (/august\s*2\b/i.test(line)) dateRatings["August 2"] = strongWord ? 2 : 1;
+                if (/august\s*9\b/i.test(line)) dateRatings["August 9"] = strongWord ? 2 : 1;
+
+                if (anySunday) {
+                    DATE_OPTIONS.forEach(d => { if (!dateRatings[d]) dateRatings[d] = 1; });
                 }
 
-                // Match preferred Sunday options
-                let matchedDate = "July 12";
-                if (/12|july 12/i.test(line)) {
-                    matchedDate = "July 12";
-                } else if (/19|july 19/i.test(line)) {
-                    matchedDate = "July 19";
-                } else if (/26|july 26/i.test(line)) {
-                    matchedDate = "July 26";
-                } else if (/2|august 2/i.test(line)) {
-                    matchedDate = "August 2";
-                } else if (/9|august 9/i.test(line)) {
-                    matchedDate = "August 9";
-                }
-
-                // Match cleaner notes
                 let note = "Imported preference";
                 const noteExtract = line.replace(/vote:|date:|sunday|miko|good home|lone star/gi, '').replace(/^.*?[:\-]/, '').trim();
-                if (noteExtract.length > 5) {
-                    note = noteExtract;
+                if (noteExtract.length > 5) note = noteExtract;
+
+                if (Object.keys(venueRatings).length === 0 && Object.keys(dateRatings).length === 0 && !anySunday) {
+                    return; // nothing recognizable in this line
                 }
 
                 parsedQueue.push({
                     name: matchedName,
                     adults: adults,
                     kids: kids,
-                    venue: matchedVenue,
-                    weekend: matchedDate,
+                    venueRatings: venueRatings,
+                    dateRatings: dateRatings,
+                    anySunday: anySunday,
                     notes: note,
                     timestamp: Date.now()
                 });
@@ -832,12 +851,9 @@
                 try {
                     const votesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'votes');
                     const snapshot = await getDocs(votesCollection);
-                    
-                    // Batch delete all entries
-                    for (let document of snapshot.docs) {
-                        await deleteDoc(document.ref);
+                    for (let d of snapshot.docs) {
+                        await deleteDoc(d.ref);
                     }
-
                     showToast("Cloud database reset successfully!", "🔄");
                 } catch (e) {
                     console.error("Failed to delete cloud documents:", e);
@@ -858,8 +874,12 @@
         window.updateFormPreview = updateFormPreview;
         window.openConfirmModal = openConfirmModal;
         window.closeConfirmModal = closeConfirmModal;
+        window.setVenueRating = setVenueRating;
+        window.setDateRating = setDateRating;
+        window.toggleAnySunday = toggleAnySunday;
 
         // Initialize session routines on startup
+        buildDateRows();
         document.getElementById('btn-modal-confirm').addEventListener('click', clearAllVotes);
         startSession();
         updateFormPreview();
