@@ -41,7 +41,7 @@
                 Family Lunch Coordinator
             </h1>
             <p class="mt-3 text-sm sm:text-base text-slate-600 max-w-2xl mx-auto">
-                Finding the perfect Sunday middle ground for the crew driving north from <span class="font-semibold text-emerald-600">Te Puke, Tauranga & Waihi</span> and those driving south from <span class="font-semibold text-sky-600">Kumeu</span>!
+                Finding the perfect Sunday middle ground for the families driving north from <span class="font-semibold text-emerald-600">Te Puke, Tauranga & Waihi</span> and those driving south from <span class="font-semibold text-sky-600">Kumeu</span>!
             </p>
             <div class="mt-4 flex flex-wrap justify-center items-center gap-3 text-xs sm:text-sm text-slate-500">
                 <span>📍 South Auckland Meeting Point</span>
@@ -53,6 +53,11 @@
                 </span>
             </div>
         </header>
+
+        <!-- Live Booking Deadline Banner (auto-updates based on current leading choice) -->
+        <div id="deadline-banner" class="hidden mb-6 bg-amber-500 text-white rounded-2xl p-4 shadow-md">
+            <!-- Populated dynamically by JS -->
+        </div>
 
         <!-- Notification Toast -->
         <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
@@ -67,7 +72,7 @@
             <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl transform scale-95 transition-transform duration-300">
                 <div class="text-red-500 text-3xl mb-3">⚠️</div>
                 <h3 class="text-lg font-bold text-slate-900 mb-2">Reset Cloud Database?</h3>
-                <p class="text-xs text-slate-600 mb-6">This will permanently delete all family votes from the cloud database. This action cannot be undone.</p>
+                <p id="reset-modal-message" class="text-xs text-slate-600 mb-6">This will permanently delete all family votes from the cloud database. This action cannot be undone.</p>
                 <div class="flex gap-3 justify-end">
                     <button onclick="closeConfirmModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">Cancel</button>
                     <button id="btn-modal-confirm" class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-red-600 hover:bg-red-500 transition">Yes, Clear Database</button>
@@ -138,6 +143,11 @@
                                         Cafe Miko <span class="text-xs sm:text-sm font-normal text-slate-500">(Botanic Gardens)</span>
                                     </span>
                                     <span class="mt-1 block text-xs text-slate-500">Beautiful, scenic, bright. Great for a stroll in the fresh winter gardens.</span>
+                                    <div class="mt-2 flex gap-3 text-[11px]">
+                                        <a href="https://www.mikocafe.nz/" target="_blank" rel="noopener" class="text-indigo-600 hover:underline">🌐 Website</a>
+                                        <a href="https://www.aucklandbotanicgardens.co.nz/media/ujde24eb/cafe-miko_summer-menu-2024.pdf" target="_blank" rel="noopener" class="text-indigo-600 hover:underline">📋 Menu</a>
+                                        <a href="https://www.google.com/maps/search/?api=1&query=Cafe+Miko+Auckland+Botanic+Gardens" target="_blank" rel="noopener" class="text-indigo-600 hover:underline">📍 Map</a>
+                                    </div>
                                 </div>
                                 <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded whitespace-nowrap">Relaxed</span>
                             </div>
@@ -156,6 +166,11 @@
                                         The Good Home <span class="text-xs sm:text-sm font-normal text-slate-500">(Takanini)</span>
                                     </span>
                                     <span class="mt-1 block text-xs text-slate-500">Cozy gastropub with a heated courtyard and hearty Kiwi classic plates.</span>
+                                    <div class="mt-2 flex gap-3 text-[11px]">
+                                        <a href="https://www.goodhometakanini.co.nz/" target="_blank" rel="noopener" class="text-indigo-600 hover:underline">🌐 Website</a>
+                                        <a href="https://www.goodhometakanini.co.nz/menu" target="_blank" rel="noopener" class="text-indigo-600 hover:underline">📋 Menu</a>
+                                        <a href="https://www.google.com/maps/search/?api=1&query=The+Good+Home+Takanini" target="_blank" rel="noopener" class="text-indigo-600 hover:underline">📍 Map</a>
+                                    </div>
                                 </div>
                                 <span class="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-1 rounded whitespace-nowrap">Cozy</span>
                             </div>
@@ -174,6 +189,11 @@
                                         Lone Star <span class="text-xs sm:text-sm font-normal text-slate-500">(Manukau)</span>
                                     </span>
                                     <span class="mt-1 block text-xs text-slate-500">Lively, fun, big portions. Great private dining space for hungry groups.</span>
+                                    <div class="mt-2 flex gap-3 text-[11px]">
+                                        <a href="https://www.lonestar.co.nz/restaurants/manukau" target="_blank" rel="noopener" class="text-indigo-600 hover:underline">🌐 Website</a>
+                                        <a href="https://www.lonestar.co.nz/menu" target="_blank" rel="noopener" class="text-indigo-600 hover:underline">📋 Menu</a>
+                                        <a href="https://www.google.com/maps/search/?api=1&query=Lone+Star+Manukau" target="_blank" rel="noopener" class="text-indigo-600 hover:underline">📍 Map</a>
+                                    </div>
                                 </div>
                                 <span class="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-1 rounded whitespace-nowrap">Lively</span>
                             </div>
@@ -306,6 +326,9 @@
                         <button onclick="processImportedComments()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 px-3 rounded-lg text-xs transition duration-150">
                             Add Offline Vote
                         </button>
+                        <button onclick="exportVotesAsText()" class="border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium py-2 px-3 rounded-lg text-xs transition duration-150">
+                            📤 Export
+                        </button>
                         <button onclick="openConfirmModal()" class="border border-red-300 hover:bg-red-50 text-red-700 font-medium py-2 px-3 rounded-lg text-xs transition duration-150">
                             Reset Database
                         </button>
@@ -362,6 +385,7 @@
         let currentDateRatings = {};
         DATE_OPTIONS.forEach(d => currentDateRatings[d] = 0);
         let anySundayFlag = false;
+        let latestVotesSnapshot = []; // Keeps the most recent rendered votes for export/backup
 
         // Visual layout target elements
         const statusEl = document.getElementById('connection-status');
@@ -435,6 +459,14 @@
 
         // Custom UI Modal triggers to completely avoid browser alert and confirm
         function openConfirmModal() {
+            const count = latestVotesSnapshot.length;
+            const msgEl = document.getElementById('reset-modal-message');
+            if (count > 0) {
+                msgEl.textContent = `This will permanently delete ${count} family vote${count === 1 ? '' : 's'} from the cloud database. A backup was just copied to your clipboard — paste it somewhere safe before confirming. This action cannot be undone.`;
+                exportVotesAsText(true); // silent backup copy
+            } else {
+                msgEl.textContent = "There are no votes in the database right now, so there's nothing to lose. This action cannot be undone.";
+            }
             const modal = document.getElementById('confirm-modal');
             modal.classList.remove('hidden');
             setTimeout(() => {
@@ -442,6 +474,38 @@
                 modal.querySelector('.transform').classList.remove('scale-95');
                 modal.querySelector('.transform').classList.add('scale-100');
             }, 10);
+        }
+
+        // Export all current votes as readable text, copied to clipboard
+        function exportVotesAsText(silent = false) {
+            if (latestVotesSnapshot.length === 0) {
+                if (!silent) showToast("No votes to export yet!", "⚠️");
+                return;
+            }
+            const lines = latestVotesSnapshot.map(vote => {
+                const vRatings = getVenueRatings(vote);
+                const dRatings = getDateRatings(vote);
+                const venueText = Object.entries(vRatings).map(([k, v]) => `${k} (${RATING_LABELS[v] || v})`).join(', ') || 'none';
+                const dateText = Object.entries(dRatings).map(([k, v]) => `${k} (${RATING_LABELS[v] || v})`).join(', ') || 'none';
+                const flexText = vote.anySunday ? ' | Any Sunday: yes' : '';
+                const noteText = vote.notes ? ` | Notes: ${vote.notes}` : '';
+                return `${vote.name || 'Anonymous'} (${vote.adults || 0} Adults, ${vote.kids || 0} Kids): Venues — ${venueText} | Sundays — ${dateText}${flexText}${noteText}`;
+            });
+            const fullText = `Family Lunch Planner — Vote Backup (${new Date().toLocaleString()})\n\n${lines.join('\n')}`;
+
+            const textArea = document.createElement("textarea");
+            textArea.value = fullText;
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                if (!silent) showToast(`Copied ${latestVotesSnapshot.length} votes to clipboard!`, "📤");
+            } catch (err) {
+                if (!silent) showToast("Could not copy — try selecting manually.", "❌");
+            }
+            document.body.removeChild(textArea);
         }
 
         function closeConfirmModal() {
@@ -655,6 +719,7 @@
 
         // ---------- Render Weighted Stats and Ranked Standings ----------
         function renderStatistics(votesDatabase) {
+            latestVotesSnapshot = votesDatabase;
             let totalInputs = votesDatabase.length;
             let totalAdults = 0;
             let totalKids = 0;
@@ -726,6 +791,48 @@
 
             renderRankedList('venue-standings-list', venueScores, ['bg-indigo-600', 'bg-emerald-500', 'bg-amber-500']);
             renderRankedList('date-standings-list', dateScores, ['bg-indigo-400'], true);
+            updateDeadlineBanner(venueScores, dateScores);
+        }
+
+        // ---------- Live booking deadline banner ----------
+        // Cafe Miko confirmed they need a headcount by the Thursday before a Sunday booking.
+        // Assuming the same lead time applies to The Good Home and Lone Star.
+        function updateDeadlineBanner(venueScores, dateScores) {
+            const banner = document.getElementById('deadline-banner');
+            const dateEntries = Object.entries(dateScores).sort((a, b) => b[1] - a[1]);
+            const venueEntries = Object.entries(venueScores).sort((a, b) => b[1] - a[1]);
+            const topDate = (dateEntries.length && dateEntries[0][1] > 0) ? dateEntries[0][0] : null;
+            const topVenue = (venueEntries.length && venueEntries[0][1] > 0) ? venueEntries[0][0] : null;
+
+            if (!topDate) {
+                banner.classList.add('hidden');
+                return;
+            }
+
+            const sundayDate = new Date(`${topDate}, 2026`);
+            const deadline = new Date(sundayDate);
+            deadline.setDate(deadline.getDate() - 3); // Thursday before, per Cafe Miko's booking lead time
+
+            const deadlineStr = deadline.toLocaleDateString('en-NZ', { weekday: 'long', day: 'numeric', month: 'long' });
+            const sundayStr = sundayDate.toLocaleDateString('en-NZ', { day: 'numeric', month: 'long' });
+            const today = new Date();
+            const daysLeft = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24));
+            const urgencyNote = daysLeft < 0
+                ? `<span class="font-semibold">This booking deadline has already passed — please confirm venue availability directly.</span>`
+                : daysLeft === 0
+                    ? `<span class="font-semibold">That's today!</span>`
+                    : `<span class="font-semibold">That's ${daysLeft} day${daysLeft === 1 ? '' : 's'} away.</span>`;
+
+            banner.innerHTML = `
+                <div class="flex items-start sm:items-center gap-3">
+                    <span class="text-2xl">⏰</span>
+                    <div>
+                        <p class="font-bold text-sm sm:text-base">Currently leading: ${topVenue || 'a venue'} on Sunday, ${sundayStr}</p>
+                        <p class="text-xs sm:text-sm text-amber-50 mt-0.5">To lock in this booking, please get your vote in by <span class="font-semibold">${deadlineStr}</span>. ${urgencyNote}</p>
+                    </div>
+                </div>
+            `;
+            banner.classList.remove('hidden');
         }
 
         function renderRankedList(containerId, scoresObj, barColors, isDate = false) {
@@ -877,6 +984,7 @@
         window.setVenueRating = setVenueRating;
         window.setDateRating = setDateRating;
         window.toggleAnySunday = toggleAnySunday;
+        window.exportVotesAsText = exportVotesAsText;
 
         // Initialize session routines on startup
         buildDateRows();
