@@ -55,6 +55,15 @@
             </div>
         </header>
 
+        <!-- Fixed Voting Deadline Banner — this round needs a hard cutoff since July 19 is back in play -->
+        <div class="mb-4 bg-rose-600 text-white rounded-2xl p-4 shadow-md flex items-start sm:items-center gap-3">
+            <span class="text-2xl">📢</span>
+            <div>
+                <p class="font-bold text-sm sm:text-base">All votes needed back by Wednesday, 15 July</p>
+                <p class="text-xs sm:text-sm text-rose-50 mt-0.5">We've added Sunday 19 July back in as an option, so we need a quick turnaround this round — please get your vote in by then.</p>
+            </div>
+        </div>
+
         <!-- Live Booking Deadline Banner (auto-updates based on current leading choice) -->
         <div id="deadline-banner" class="hidden mb-6 bg-amber-500 text-white rounded-2xl p-4 shadow-md">
             <!-- Populated dynamically by JS -->
@@ -378,7 +387,7 @@
 
         // Global option lists
         const VENUE_OPTIONS = ["The Good Home", "Lone Star"];
-        const DATE_OPTIONS = ["August 2", "August 16", "August 30", "September 13", "September 27"];
+        const DATE_OPTIONS = ["July 19", "August 2", "August 16", "August 30", "September 13", "September 27"];
         const RATING_LABELS = { 0: "🚫 Can't attend", 1: "🙂 Works", 2: "⭐ Favorite" };
 
         // Current in-progress vote state.
@@ -996,6 +1005,7 @@
 
                 // Detect every specific Sunday mentioned
                 const dateRatings = {};
+                if (/july\s*19/i.test(line)) dateRatings["July 19"] = negWord.test(line) ? 0 : 1;
                 if (/august\s*2\b/i.test(line)) dateRatings["August 2"] = negWord.test(line) ? 0 : 1;
                 if (/august\s*16\b/i.test(line)) dateRatings["August 16"] = negWord.test(line) ? 0 : 1;
                 if (/august\s*30\b/i.test(line)) dateRatings["August 30"] = negWord.test(line) ? 0 : 1;
