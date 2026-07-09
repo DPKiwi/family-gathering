@@ -64,9 +64,9 @@
             </div>
         </div>
 
-        <!-- Live Booking Deadline Banner (auto-updates based on current leading choice) -->
-        <div id="deadline-banner" class="hidden mb-6 bg-amber-500 text-white rounded-2xl p-4 shadow-md">
-            <!-- Populated dynamically by JS -->
+        <!-- Live "Everyone Can Attend" Banner (tracks the date with fewest exclusions, not popularity) -->
+        <div id="deadline-banner" class="hidden mb-6 bg-emerald-700 text-white rounded-2xl p-4 shadow-md">
+            <!-- Populated dynamically by JS: the date currently closest to working for everyone -->
         </div>
 
         <!-- Notification Toast -->
@@ -873,7 +873,7 @@
             renderRankedList('venue-standings-list', venueScores, ['bg-emerald-700', 'bg-teal-500', 'bg-amber-500'], false, totalInputs);
             renderRankedList('date-standings-list', dateScores, ['bg-emerald-400'], true, totalInputs);
             renderCompromiseList(dateCantAttend, totalCount, totalInputs);
-            updateDeadlineBanner(venueScores, dateScores);
+            updateDeadlineBanner(dateCantAttend, totalCount, totalInputs);
         }
 
         // Ranks dates by FEWEST people excluded (ascending), not by popularity.
@@ -917,20 +917,21 @@
             });
         }
 
-        // ---------- Live booking deadline banner ----------
+        // ---------- Live "date everyone can attend" banner ----------
         // Cafe Miko confirmed they need a headcount by the Thursday before a Sunday booking.
-        // Assuming the same lead time applies to The Good Home and Lone Star.
-        function updateDeadlineBanner(venueScores, dateScores) {
+        // This banner tracks the date with the FEWEST exclusions (the compromise winner),
+        // not the most popular one — that's the whole point of this round of voting.
+        function updateDeadlineBanner(dateCantAttend, totalCount, totalInputs) {
             const banner = document.getElementById('deadline-banner');
-            const dateEntries = Object.entries(dateScores).sort((a, b) => b[1] - a[1]);
-            const venueEntries = Object.entries(venueScores).sort((a, b) => b[1] - a[1]);
-            const topDate = (dateEntries.length && dateEntries[0][1] > 0) ? dateEntries[0][0] : null;
-            const topVenue = (venueEntries.length && venueEntries[0][1] > 0) ? venueEntries[0][0] : null;
 
-            if (!topDate) {
+            if (totalInputs === 0 || totalCount === 0) {
                 banner.classList.add('hidden');
                 return;
             }
+
+            const entries = Object.entries(dateCantAttend).sort((a, b) => a[1] - b[1]);
+            const [topDate, cantAttend] = entries[0];
+            const canAttend = Math.max(totalCount - cantAttend, 0);
 
             const sundayDate = new Date(`${topDate}, 2026`);
             const deadline = new Date(sundayDate);
@@ -946,12 +947,16 @@
                     ? `<span class="font-semibold">That's today!</span>`
                     : `<span class="font-semibold">That's ${daysLeft} day${daysLeft === 1 ? '' : 's'} away.</span>`;
 
+            const headline = cantAttend === 0
+                ? `🎉 Sunday, ${sundayStr} works for absolutely everyone so far!`
+                : `🤝 Sunday, ${sundayStr} is closest to working for everyone — only ${cantAttend} would miss out.`;
+
             banner.innerHTML = `
                 <div class="flex items-start sm:items-center gap-3">
-                    <span class="text-2xl">⏰</span>
+                    <span class="text-2xl">${cantAttend === 0 ? '🎉' : '🤝'}</span>
                     <div>
-                        <p class="font-bold text-sm sm:text-base">Currently leading: ${topVenue || 'a venue'} on Sunday, ${sundayStr}</p>
-                        <p class="text-xs sm:text-sm text-amber-50 mt-0.5">To lock in this booking, please get your vote in by <span class="font-semibold">${deadlineStr}</span>. ${urgencyNote}</p>
+                        <p class="font-bold text-sm sm:text-base">${headline}</p>
+                        <p class="text-xs sm:text-sm text-emerald-50 mt-0.5">To lock this in, please get your vote in by <span class="font-semibold">${deadlineStr}</span>. ${urgencyNote}</p>
                     </div>
                 </div>
             `;
