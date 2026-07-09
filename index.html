@@ -918,7 +918,8 @@
         }
 
         // ---------- Live "date everyone can attend" banner ----------
-        // Cafe Miko confirmed they need a headcount by the Thursday before a Sunday booking.
+        // Cafe Miko needs a headcount by the Thursday before a Sunday booking. We ask the family
+        // to vote by the Wednesday before that — a day's buffer to actually make the call.
         // This banner tracks the date with the FEWEST exclusions (the compromise winner),
         // not the most popular one — that's the whole point of this round of voting.
         function updateDeadlineBanner(dateCantAttend, totalCount, totalInputs) {
@@ -935,7 +936,7 @@
 
             const sundayDate = new Date(`${topDate}, 2026`);
             const deadline = new Date(sundayDate);
-            deadline.setDate(deadline.getDate() - 3); // Thursday before, per Cafe Miko's booking lead time
+            deadline.setDate(deadline.getDate() - 4); // Wednesday before — Cafe Miko needs headcount by Thursday, so this builds in a day's buffer to actually make that call
 
             const deadlineStr = deadline.toLocaleDateString('en-NZ', { weekday: 'long', day: 'numeric', month: 'long' });
             const sundayStr = sundayDate.toLocaleDateString('en-NZ', { day: 'numeric', month: 'long' });
