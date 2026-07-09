@@ -870,18 +870,34 @@
                 flexLabel.classList.add('hidden');
             }
 
-            renderRankedList('venue-standings-list', venueScores, ['bg-emerald-700', 'bg-teal-500', 'bg-amber-500']);
-            renderRankedList('date-standings-list', dateScores, ['bg-emerald-400'], true);
-            renderCompromiseList(dateCantAttend, totalCount);
+            renderRankedList('venue-standings-list', venueScores, ['bg-emerald-700', 'bg-teal-500', 'bg-amber-500'], false, totalInputs);
+            renderRankedList('date-standings-list', dateScores, ['bg-emerald-400'], true, totalInputs);
+            renderCompromiseList(dateCantAttend, totalCount, totalInputs);
             updateDeadlineBanner(venueScores, dateScores);
         }
 
         // Ranks dates by FEWEST people excluded (ascending), not by popularity.
         // This is the list to check when the goal is "everyone gets to come", not "most loved".
-        function renderCompromiseList(dateCantAttend, totalCount) {
+        function renderCompromiseList(dateCantAttend, totalCount, totalInputs) {
             const container = document.getElementById('date-compromise-list');
             container.innerHTML = '';
+
+            // With no votes (or nobody weighted in), "everyone can come" is vacuously true and
+            // misleading to display as if it were a real result. Show an honest empty state instead.
+            if (totalInputs === 0 || totalCount === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 italic py-2">No votes yet — this will fill in as families start voting.</p>`;
+                return;
+            }
+
             const entries = Object.entries(dateCantAttend).sort((a, b) => a[1] - b[1]);
+            const lowConfidence = totalInputs < 3;
+
+            if (lowConfidence) {
+                const note = document.createElement('p');
+                note.className = 'text-[10px] text-amber-700 italic mb-1';
+                note.textContent = `Early days — only ${totalInputs} famil${totalInputs === 1 ? 'y has' : 'ies have'} voted so far, so this isn't a reliable read yet.`;
+                container.appendChild(note);
+            }
 
             entries.forEach(([dateVal, cantAttend], idx) => {
                 const canAttend = Math.max(totalCount - cantAttend, 0);
@@ -942,16 +958,30 @@
             banner.classList.remove('hidden');
         }
 
-        function renderRankedList(containerId, scoresObj, barColors, isDate = false) {
+        function renderRankedList(containerId, scoresObj, barColors, isDate = false, totalInputs = 0) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
+
+            if (totalInputs === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 italic py-2">No votes yet.</p>`;
+                return;
+            }
+
             const entries = Object.entries(scoresObj).sort((a, b) => b[1] - a[1]);
             const maxScore = entries.length ? entries[0][1] : 0;
+
+            if (totalInputs < 3) {
+                const note = document.createElement('p');
+                note.className = 'text-[10px] text-amber-700 italic mb-1';
+                note.textContent = `Only ${totalInputs} vote${totalInputs === 1 ? '' : 's'} so far — too early to call.`;
+                container.appendChild(note);
+            }
 
             entries.forEach(([label, score], idx) => {
                 const pct = maxScore > 0 ? (score / maxScore) * 100 : 0;
                 const color = barColors[idx % barColors.length];
-                const isLeader = idx === 0 && score > 0;
+                // Only show the trophy for a genuine, distinct leader — not a tie at the top.
+                const isLeader = idx === 0 && score > 0 && (entries.length === 1 || score > entries[1][1]);
                 const wrap = document.createElement('div');
                 wrap.innerHTML = `
                     <div class="flex justify-between text-xs font-medium mb-1">
