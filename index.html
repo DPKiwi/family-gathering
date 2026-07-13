@@ -55,18 +55,13 @@
             </div>
         </header>
 
-        <!-- Fixed Voting Deadline Banner — this round needs a hard cutoff since July 19 is back in play -->
-        <div class="mb-4 bg-rose-600 text-white rounded-2xl p-4 shadow-md flex items-start sm:items-center gap-3">
-            <span class="text-2xl">📢</span>
+        <!-- Confirmed Event Banner -->
+        <div class="mb-6 bg-emerald-700 text-white rounded-2xl p-5 shadow-md flex items-start sm:items-center gap-4">
+            <span class="text-3xl">🎉</span>
             <div>
-                <p class="font-bold text-sm sm:text-base">All votes needed back by Wednesday, 15 July</p>
-                <p class="text-xs sm:text-sm text-rose-50 mt-0.5">We've added Sunday 19 July back in as an option, so we need a quick turnaround this round — please get your vote in by then.</p>
+                <p class="font-bold text-base sm:text-lg">It's confirmed! Sunday, 2 August 2026 at Cafe Miko</p>
+                <p class="text-xs sm:text-sm text-emerald-50 mt-0.5">12 Noon &middot; Auckland Botanic Gardens &middot; This date works for every family who voted. Voting is now closed — thank you all!</p>
             </div>
-        </div>
-
-        <!-- Live "Everyone Can Attend" Banner (tracks the date with fewest exclusions, not popularity) -->
-        <div id="deadline-banner" class="hidden mb-6 bg-emerald-700 text-white rounded-2xl p-4 shadow-md">
-            <!-- Populated dynamically by JS: the date currently closest to working for everyone -->
         </div>
 
         <!-- Notification Toast -->
@@ -96,114 +91,56 @@
             <!-- Left Panel: Live Cloud Voting Form -->
             <main class="lg:col-span-7 space-y-6">
 
-                <!-- Step 1: Who are you & Headcount -->
                 <section class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-xs font-semibold text-emerald-700">1</span>
-                        <h2 class="text-base sm:text-lg font-bold text-emerald-950">Your Family Details</h2>
-                    </div>
-
-                    <div class="space-y-4">
-                        <!-- Name Input -->
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Family Group / Name</label>
-                            <input type="text" id="name-input" placeholder="e.g. Aunt Sarah & Uncle Dave" class="w-full rounded-xl border-slate-200 border p-3 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" oninput="updateFormPreview()">
-                        </div>
-
-                        <!-- Dropdowns for headcount -->
-                        <div class="grid grid-cols-2 gap-3">
+                    <h2 class="text-lg sm:text-xl font-bold text-emerald-950 mb-4 flex items-center gap-2">📋 Event Details</h2>
+                    <div class="space-y-4 text-sm text-slate-700">
+                        <div class="flex items-start gap-3">
+                            <span class="text-xl">📅</span>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Adults (12+ yrs)</label>
-                                <select id="adults-input" class="w-full rounded-xl border-slate-200 border p-3 text-sm outline-none bg-white" onchange="updateFormPreview()">
-                                    <option value="1">1 Adult</option>
-                                    <option value="2" selected>2 Adults</option>
-                                    <option value="3">3 Adults</option>
-                                    <option value="4">4 Adults</option>
-                                    <option value="5">5 Adults</option>
-                                </select>
+                                <p class="font-semibold text-slate-900">Sunday, 2 August 2026</p>
+                                <p class="text-xs text-slate-500">12 Noon</p>
                             </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-xl">📍</span>
                             <div>
-                                <label class="block text-xs font-semibold text-slate-700 mb-1">Children (under 12)</label>
-                                <select id="kids-input" class="w-full rounded-xl border-slate-200 border p-3 text-sm outline-none bg-white" onchange="updateFormPreview()">
-                                    <option value="0" selected>0 Kids</option>
-                                    <option value="1">1 Child</option>
-                                    <option value="2">2 Kids</option>
-                                    <option value="3">3 Kids</option>
-                                    <option value="4">4 Kids</option>
-                                </select>
+                                <p class="font-semibold text-slate-900">Cafe Miko, Auckland Botanic Gardens</p>
+                                <p class="text-xs text-slate-500">102 Hill Road, Manurewa &middot; free parking on-site</p>
+                                <div class="mt-1 flex gap-3 text-[11px]">
+                                    <a href="https://www.mikocafe.nz/" target="_blank" rel="noopener" class="text-emerald-700 hover:underline">🌐 Website</a>
+                                    <a href="https://www.google.com/maps/search/?api=1&query=Cafe+Miko+Auckland+Botanic+Gardens" target="_blank" rel="noopener" class="text-emerald-700 hover:underline">📍 Map</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-xl">🌦️</span>
+                            <div>
+                                <p class="font-semibold text-slate-900">Weather plan</p>
+                                <p class="text-xs text-slate-500">Seated on the terrace, weather permitting. Cafe Miko will confirm the terrace vs. indoor call by 10am on the day if it's 50/50.</p>
                             </div>
                         </div>
                     </div>
-                </section>
 
-                <!-- Step 2: Date Selector (rating + Any Sunday) -->
-                <section class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-xs font-semibold text-emerald-700">2</span>
-                        <h2 class="text-base sm:text-lg font-bold text-emerald-950">Rate Every Sunday</h2>
-                    </div>
-                    <p class="text-xs text-slate-500 mb-4 ml-9">Please rate <strong>every</strong> Sunday, even the ones that don't work — that's how we find a date where nobody misses out, not just the most popular one.</p>
-
-                    <button type="button" id="any-sunday-btn" onclick="toggleAnySunday(this)" class="w-full mb-4 rounded-xl border-2 border-dashed border-emerald-300 bg-emerald-50/60 text-emerald-800 font-semibold text-sm py-3 transition">
-                        🔀 Any Sunday works for us!
-                    </button>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="date-list">
-                        <!-- Month calendars injected via JS -->
-                    </div>
-                    <div class="mt-4 flex flex-wrap gap-3 text-[10px] text-slate-500">
-                        <span class="flex items-center gap-1"><span class="inline-block h-3 w-3 rounded border-2 border-dashed border-amber-400"></span> Awaiting your tap</span>
-                        <span class="flex items-center gap-1"><span class="inline-block h-3 w-3 rounded bg-emerald-100 border border-emerald-400"></span> Works</span>
-                        <span class="flex items-center gap-1"><span class="inline-block h-3 w-3 rounded bg-red-100 border border-red-400"></span> Can't attend</span>
-                    </div>
-                    <p class="mt-2 text-[10px] text-slate-400"><strong>1 tap</strong> = 🙂 Works, <strong>2 taps</strong> = 🚫 Can't attend, <strong>3 taps</strong> = back to Works. Every highlighted date needs a tap before you can submit.</p>
-                    <p class="mt-1 text-[10px] text-slate-400">Weather notes above are typical seasonal averages, not a forecast — actual forecasts for these dates aren't available yet. Worth checking <a href="https://www.metservice.com/towns-cities/auckland" target="_blank" rel="noopener" class="text-emerald-700 hover:underline">MetService</a> again closer to the day.</p>
-                </section>
-
-                <!-- Step 3: Special Notes -->
-                <section class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
-                    <div class="flex items-center gap-2 mb-3">
-                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-xs font-semibold text-emerald-700">3</span>
-                        <h2 class="text-base sm:text-lg font-bold text-emerald-950">Notes & Dietary Needs</h2>
-                    </div>
-                    <p class="text-xs text-slate-500 mb-3">For example: "Grandpa needs flat walking paths" or "Kid is dairy-free"</p>
-                    <textarea id="notes-input" placeholder="Type notes here..." rows="2" class="w-full rounded-xl border-slate-200 border p-3 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500" oninput="updateFormPreview()"></textarea>
-                </section>
-
-                <!-- Action Module -->
-                <section class="bg-emerald-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
-                    <div class="relative z-10">
-                        <h3 class="font-bold text-base sm:text-lg mb-1">Cast Your Live Vote!</h3>
-                        <p class="text-xs text-slate-300 mb-4">Clicking the button below instantly registers your ratings in the live family dashboard.</p>
-
-                        <!-- Visual representation of what will be saved -->
-                        <div class="bg-emerald-950 p-3 rounded-lg text-[11px] font-mono text-emerald-300 border border-emerald-800/50 mb-4 break-words">
-                            <span class="text-slate-400">Vote Preview:</span><br>
-                            <span id="copy-preview">🗳️ [Name]: rate every Sunday above</span>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <button id="btn-submit-vote" onclick="submitLiveVote()" class="flex-1 bg-emerald-700 hover:bg-emerald-600 active:bg-emerald-800 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 text-xs sm:text-sm shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
-                                <span>🚀</span> Submit Vote Live
-                            </button>
-                            <button onclick="copyToClipboard()" class="bg-emerald-800 hover:bg-emerald-700 border border-emerald-700 text-emerald-100 py-3 px-4 rounded-xl text-xs font-medium transition duration-200 flex items-center justify-center gap-1.5">
-                                📋 Copy text format
-                            </button>
-                        </div>
+                    <div class="mt-5 pt-5 border-t border-emerald-100 flex gap-2 items-start rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+                        <span class="text-base leading-none">✅</span>
+                        <p class="text-[11px] sm:text-xs text-emerald-900 leading-snug">
+                            Voting is now closed — thank you to everyone who took part! This date works for every single family who voted. If your numbers have changed or you have a dietary need to flag, please get in touch directly rather than through this page.
+                        </p>
                     </div>
                 </section>
             </main>
 
+
             <!-- Right Panel: Live Stats and Admin Options -->
             <aside class="lg:col-span-5 space-y-6">
 
-                <!-- Live Attendance Tally Badge -->
+                <!-- Final Headcount Badge -->
                 <div class="bg-emerald-900 text-white p-6 rounded-2xl shadow-md relative overflow-hidden">
                     <div class="absolute -right-6 -bottom-6 text-emerald-800 opacity-30 text-8xl font-bold select-none">
                         👥
                     </div>
                     <div class="relative z-10">
-                        <span class="uppercase tracking-wider text-[10px] font-bold text-emerald-300">Live Attendance Tally</span>
+                        <span class="uppercase tracking-wider text-[10px] font-bold text-emerald-300">Final Headcount</span>
                         <h2 class="text-xl sm:text-2xl font-extrabold mt-1" id="total-headcount">0 People Confirmed</h2>
                         <div class="flex gap-4 mt-3 pt-3 border-t border-emerald-800/60 text-xs sm:text-sm">
                             <div class="flex items-center gap-1.5">
@@ -215,61 +152,30 @@
                                 <span class="font-bold text-white text-sm sm:text-base" id="kid-count">0</span>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Live Tally Dashboard -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
-                    <h2 class="text-base font-bold text-slate-900 mb-4 flex items-center justify-between">
-                        <span>📊 Live Standings</span>
-                        <span id="vote-count-badge" class="text-[11px] font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">0 inputs</span>
-                    </h2>
-
-                    <!-- Compromise Standings — ranks by fewest people excluded, not popularity -->
-                    <div class="mb-6 space-y-3 pb-6 border-b border-emerald-100">
-                        <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">🤝 Best For Everyone &mdash; Fewest Missing Out</h3>
-                        <div id="date-compromise-list" class="space-y-2"></div>
-                    </div>
-
-                    <!-- Date Standings (rendered dynamically, ranked) -->
-                    <div class="space-y-3">
-                        <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Sunday Popularity &mdash; Ranked</h3>
-                        <p id="flexible-count-label" class="text-[11px] text-emerald-700 font-medium hidden">🔀 0 families said any Sunday works</p>
-                        <div id="date-standings-list" class="space-y-2"></div>
+                        <p class="text-[10px] text-emerald-200 mt-2" id="vote-count-badge">0 families voted</p>
                     </div>
                 </div>
 
                 <!-- Simple list of notes gathered from votes -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
-                    <h3 class="font-bold text-slate-900 text-sm mb-3">💬 Gathered Comments & Notes</h3>
-                    <ul id="family-notes-list" class="space-y-2 text-xs divide-y divide-slate-100 max-h-48 overflow-y-auto pr-1">
+                    <h3 class="font-bold text-slate-900 text-sm mb-3">💬 Family Notes & Dietary Needs</h3>
+                    <ul id="family-notes-list" class="space-y-2 text-xs divide-y divide-slate-100 max-h-64 overflow-y-auto pr-1">
                         <!-- Dynamic items injected here -->
                     </ul>
                 </div>
 
-                <!-- Organizer Dashboard: Add Offline Votes -->
+                <!-- Archive Tool -->
                 <div class="bg-amber-50 p-6 rounded-2xl border border-amber-200">
                     <div class="flex items-center gap-2 mb-2">
-                        <span class="text-lg">🛠️</span>
-                        <h3 class="font-bold text-slate-900 text-sm">Offline Vote Tool</h3>
+                        <span class="text-lg">🗄️</span>
+                        <h3 class="font-bold text-slate-900 text-sm">Archive</h3>
                     </div>
                     <p class="text-xs text-slate-600 mb-4">
-                        Did an uncle text or comment instead of using the site? Paste his message below to automatically parse and add it on his behalf! Mention "can't"/"no" for an exclusion, or "any sunday" for full flexibility.
+                        Voting is closed, so the Add/Reset tools have been retired. You can still export the final vote record below for safekeeping.
                     </p>
-
-                    <textarea id="import-box" placeholder="Example format:&#10;Uncle Dave: Lone Star works, The Good Home can't, any Sunday fine (2 adults)&#10;Aunt Sarah: The Good Home works, Lone Star can't, August 16 (2 adults, 1 kid)" rows="3" class="w-full rounded-xl bg-white border-slate-200 border p-3 text-[11px] outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 mb-3 font-mono"></textarea>
-
-                    <div class="flex gap-2">
-                        <button onclick="processImportedComments()" class="flex-1 bg-emerald-800 hover:bg-emerald-700 text-white font-semibold py-2 px-3 rounded-lg text-xs transition duration-150">
-                            Add Offline Vote
-                        </button>
-                        <button onclick="exportVotesAsText()" class="border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium py-2 px-3 rounded-lg text-xs transition duration-150">
-                            📤 Export
-                        </button>
-                        <button onclick="openConfirmModal()" class="border border-red-300 hover:bg-red-50 text-red-700 font-medium py-2 px-3 rounded-lg text-xs transition duration-150">
-                            Reset Database
-                        </button>
-                    </div>
+                    <button onclick="exportVotesAsText()" class="w-full border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium py-2 px-3 rounded-lg text-xs transition duration-150">
+                        📤 Export Final Record
+                    </button>
                 </div>
 
             </aside>
@@ -710,35 +616,21 @@
             let totalInputs = votesDatabase.length;
             let totalAdults = 0;
             let totalKids = 0;
-            let flexibleFamilies = 0;
-
-            const dateScores = {};
-            const dateCantAttend = {};
-            DATE_OPTIONS.forEach(d => { dateScores[d] = 0; dateCantAttend[d] = 0; });
 
             const notesContainer = document.getElementById('family-notes-list');
             notesContainer.innerHTML = '';
 
             votesDatabase.forEach(vote => {
-                const groupCount = parseInt(vote.adults || 0) + parseInt(vote.kids || 0);
                 totalAdults += parseInt(vote.adults || 0);
                 totalKids += parseInt(vote.kids || 0);
-                if (vote.anySunday) flexibleFamilies += 1;
 
                 const vRatings = getVenueRatings(vote); // legacy-only, for display in notes below
-
                 const dRatings = getDateRatings(vote);
-                Object.entries(dRatings).forEach(([dateVal, score]) => {
-                    if (dateScores[dateVal] !== undefined) dateScores[dateVal] += (score * groupCount);
-                    if (dateCantAttend[dateVal] !== undefined && score === 0) dateCantAttend[dateVal] += groupCount;
-                });
 
                 const voteAuthor = vote.name || "Anonymous";
                 let sizeLabel = `${vote.adults || 2}A`;
                 if (vote.kids > 0) sizeLabel += `, ${vote.kids}C`;
 
-                const topVenues = Object.entries(vRatings).filter(([, s]) => s === 2).map(([k]) => k);
-                const venueLabel = topVenues.length ? topVenues.join(', ') : (Object.keys(vRatings)[0] || '—');
                 const topDates = Object.entries(dRatings).filter(([, s]) => s === 2).map(([k]) => k);
                 let dateLabel = topDates.length ? topDates.join(', ') : (Object.keys(dRatings)[0] || '—');
                 if (vote.anySunday) dateLabel += ' (any Sunday ok)';
@@ -763,20 +655,7 @@
             document.getElementById('total-headcount').textContent = `${totalCount} Person${totalCount === 1 ? '' : 's'} Confirmed`;
             document.getElementById('adult-count').textContent = totalAdults;
             document.getElementById('kid-count').textContent = totalKids;
-            document.getElementById('vote-count-badge').textContent = `${totalInputs} families voted`;
-
-            const flexLabel = document.getElementById('flexible-count-label');
-            if (flexibleFamilies > 0) {
-                flexLabel.textContent = `🔀 ${flexibleFamilies} famil${flexibleFamilies === 1 ? 'y' : 'ies'} said any Sunday works`;
-                flexLabel.classList.remove('hidden');
-            } else {
-                flexLabel.classList.add('hidden');
-            }
-
-            latestDateCantAttend = dateCantAttend; // used by the in-calendar "would exclude someone" nudge
-            renderRankedList('date-standings-list', dateScores, ['bg-emerald-400'], true, totalInputs);
-            renderCompromiseList(dateCantAttend, totalCount, totalInputs);
-            updateDeadlineBanner(dateCantAttend, totalCount, totalInputs);
+            document.getElementById('vote-count-badge').textContent = `${totalInputs} famil${totalInputs === 1 ? 'y' : 'ies'} voted`;
         }
 
         // Ranks dates by FEWEST people excluded (ascending), not by popularity.
@@ -818,53 +697,6 @@
                 `;
                 container.appendChild(wrap);
             });
-        }
-
-        // ---------- Live "date everyone can attend" banner ----------
-        // Cafe Miko needs a headcount by the Thursday before a Sunday booking. We ask the family
-        // to vote by the Wednesday before that — a day's buffer to actually make the call.
-        // This banner tracks the date with the FEWEST exclusions (the compromise winner),
-        // not the most popular one — that's the whole point of this round of voting.
-        function updateDeadlineBanner(dateCantAttend, totalCount, totalInputs) {
-            const banner = document.getElementById('deadline-banner');
-
-            if (totalInputs === 0 || totalCount === 0) {
-                banner.classList.add('hidden');
-                return;
-            }
-
-            const entries = Object.entries(dateCantAttend).sort((a, b) => a[1] - b[1]);
-            const [topDate, cantAttend] = entries[0];
-            const canAttend = Math.max(totalCount - cantAttend, 0);
-
-            const sundayDate = new Date(`${topDate}, 2026`);
-            const deadline = new Date(sundayDate);
-            deadline.setDate(deadline.getDate() - 4); // Wednesday before — Cafe Miko needs headcount by Thursday, so this builds in a day's buffer to actually make that call
-
-            const deadlineStr = deadline.toLocaleDateString('en-NZ', { weekday: 'long', day: 'numeric', month: 'long' });
-            const sundayStr = sundayDate.toLocaleDateString('en-NZ', { day: 'numeric', month: 'long' });
-            const today = new Date();
-            const daysLeft = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24));
-            const urgencyNote = daysLeft < 0
-                ? `<span class="font-semibold">This booking deadline has already passed — please confirm venue availability directly.</span>`
-                : daysLeft === 0
-                    ? `<span class="font-semibold">That's today!</span>`
-                    : `<span class="font-semibold">That's ${daysLeft} day${daysLeft === 1 ? '' : 's'} away.</span>`;
-
-            const headline = cantAttend === 0
-                ? `🎉 Sunday, ${sundayStr} works for absolutely everyone so far!`
-                : `🤝 Sunday, ${sundayStr} is closest to working for everyone — only ${cantAttend} would miss out.`;
-
-            banner.innerHTML = `
-                <div class="flex items-start sm:items-center gap-3">
-                    <span class="text-2xl">${cantAttend === 0 ? '🎉' : '🤝'}</span>
-                    <div>
-                        <p class="font-bold text-sm sm:text-base">${headline}</p>
-                        <p class="text-xs sm:text-sm text-emerald-50 mt-0.5">To lock this in, please get your vote in by <span class="font-semibold">${deadlineStr}</span>. ${urgencyNote}</p>
-                    </div>
-                </div>
-            `;
-            banner.classList.remove('hidden');
         }
 
         function renderRankedList(containerId, scoresObj, barColors, isDate = false, totalInputs = 0) {
@@ -1033,11 +865,10 @@
         window.toggleAnySunday = toggleAnySunday;
         window.exportVotesAsText = exportVotesAsText;
 
-        // Initialize session routines on startup
-        buildDateCalendar();
+        // Initialize session routines on startup — the voting form is retired, so we
+        // only need to start the Firestore session to display the final results.
         document.getElementById('btn-modal-confirm').addEventListener('click', clearAllVotes);
         startSession();
-        updateFormPreview();
     </script>
 </body>
 </html>
