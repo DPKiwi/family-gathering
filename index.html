@@ -115,8 +115,8 @@
                         <div class="flex items-start gap-3">
                             <span class="text-xl">🌦️</span>
                             <div>
-                                <p class="font-semibold text-slate-900">Weather plan</p>
-                                <p class="text-xs text-slate-500">Seated on the terrace, weather permitting. Cafe Miko will confirm the terrace vs. indoor call by 10am on the day if it's 50/50.</p>
+                                <p class="font-semibold text-slate-900">Seating: Western Terrace (outdoors)</p>
+                                <p class="text-xs text-slate-500">With our group now at 33, Cafe Miko can only accommodate us outdoors — 3 round tables of 10 plus a smaller table. Pre-ordered meals are required so the kitchen can serve us as a group.</p>
                             </div>
                         </div>
                     </div>
@@ -124,8 +124,43 @@
                     <div class="mt-5 pt-5 border-t border-emerald-100 flex gap-2 items-start rounded-xl border border-emerald-200 bg-emerald-50 p-3">
                         <span class="text-base leading-none">✅</span>
                         <p class="text-[11px] sm:text-xs text-emerald-900 leading-snug">
-                            Voting is now closed — thank you to everyone who took part! This date works for every single family who voted. If your numbers have changed or you have a dietary need to flag, please get in touch directly rather than through this page.
+                            Voting is closed and the date's locked in — thank you all! One last step: please pre-order your meal below so we can send Cafe Miko one consolidated order.
                         </p>
+                    </div>
+                </section>
+
+                <!-- Meal Pre-Order Form -->
+                <section class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+                    <h2 class="text-lg sm:text-xl font-bold text-emerald-950 mb-1 flex items-center gap-2">🍽️ Pre-Order Your Meal</h2>
+                    <p class="text-xs text-slate-500 mb-4">Cafe Miko needs everyone's order ahead of time so the kitchen can serve our group together. Choose your family's items below — one submission per family/household is fine.</p>
+
+                    <div class="mb-4 flex gap-2 items-start rounded-xl border border-amber-200 bg-amber-50 p-3">
+                        <span class="text-base leading-none">🌾</span>
+                        <p class="text-[11px] sm:text-xs text-amber-900 leading-snug">
+                            <strong>Gluten-free:</strong> GF options are available for the Turkish Eggs (GF bread), Steak Frites, and any pizza — just note it below. The cabinet also has GF Spinach & Feta Quiche, Frittata, Orange Citrus Cake, Carrot Cake, and Chocolate Brownie (please double-check availability with staff on the day).
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Family Group / Name</label>
+                        <input type="text" id="order-name-input" placeholder="e.g. Aunt Sarah & Uncle Dave" class="w-full rounded-xl border-slate-200 border p-3 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500">
+                    </div>
+
+                    <div id="menu-form-list" class="space-y-6">
+                        <!-- Menu categories injected via JS -->
+                    </div>
+
+                    <div class="mt-5">
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Notes (allergies, GF requests, substitutions)</label>
+                        <textarea id="order-notes-input" placeholder="e.g. 2x Turkish Eggs need GF bread swap" rows="2" class="w-full rounded-xl border-slate-200 border p-3 text-sm outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"></textarea>
+                    </div>
+
+                    <div class="mt-5 bg-emerald-900 text-white p-4 rounded-xl flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-emerald-200">Running total</p>
+                            <p class="font-bold text-lg" id="order-running-total">$0.00</p>
+                        </div>
+                        <button id="btn-submit-order" onclick="submitFoodOrder()" class="bg-white text-emerald-800 hover:bg-emerald-50 font-semibold py-2.5 px-5 rounded-xl text-sm transition">🚀 Submit Order</button>
                     </div>
                 </section>
             </main>
@@ -156,6 +191,22 @@
                     </div>
                 </div>
 
+                <!-- Live Order Summary -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
+                    <h3 class="font-bold text-slate-900 text-sm mb-1 flex items-center justify-between">
+                        <span>🧾 Live Order Summary</span>
+                        <span id="order-count-badge" class="text-[11px] font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">0 orders in</span>
+                    </h3>
+                    <p class="text-[10px] text-slate-400 mb-3">Updates live as families submit their order above.</p>
+                    <div id="order-summary-list" class="space-y-1.5 text-xs">
+                        <p class="text-slate-400 italic py-2">No orders submitted yet.</p>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-emerald-100 flex justify-between items-center">
+                        <span class="text-xs font-semibold text-slate-700">Grand total</span>
+                        <span class="font-bold text-emerald-800" id="order-grand-total">$0.00</span>
+                    </div>
+                </div>
+
                 <!-- Simple list of notes gathered from votes -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
                     <h3 class="font-bold text-slate-900 text-sm mb-3">💬 Family Notes & Dietary Needs</h3>
@@ -168,13 +219,16 @@
                 <div class="bg-amber-50 p-6 rounded-2xl border border-amber-200">
                     <div class="flex items-center gap-2 mb-2">
                         <span class="text-lg">🗄️</span>
-                        <h3 class="font-bold text-slate-900 text-sm">Archive</h3>
+                        <h3 class="font-bold text-slate-900 text-sm">Archive & Chef Order</h3>
                     </div>
                     <p class="text-xs text-slate-600 mb-4">
-                        Voting is closed, so the Add/Reset tools have been retired. You can still export the final vote record below for safekeeping.
+                        Once everyone's ordered, export a clean summary to send to Natalie. Voting's closed too, so the vote-record export is here for safekeeping.
                     </p>
+                    <button onclick="exportOrderSummary()" class="w-full bg-emerald-800 hover:bg-emerald-700 text-white font-semibold py-2 px-3 rounded-lg text-xs transition duration-150 mb-2">
+                        🧾 Export Order for Chef
+                    </button>
                     <button onclick="exportVotesAsText()" class="w-full border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium py-2 px-3 rounded-lg text-xs transition duration-150">
-                        📤 Export Final Record
+                        📤 Export Final Vote Record
                     </button>
                 </div>
 
@@ -230,6 +284,48 @@
         let anySundayFlag = false;
         let latestVotesSnapshot = []; // Keeps the most recent rendered votes for export/backup
         let latestDateCantAttend = {}; // Tracks current exclusion counts per date, for the in-form nudge
+
+        // ---------- Meal Pre-Order ----------
+        const MENU = [
+            { category: "Brunch-Lunch", items: [
+                { id: "french_toast", name: "Croissant Style French Toast", price: 26, gf: false },
+                { id: "turkish_eggs", name: "Turkish Eggs", price: 25, gf: true },
+                { id: "thai_curry_roll", name: "Thai Green Curry Hawker Roll", price: 25, gf: false },
+                { id: "mikos_benedict", name: "Miko's Benedict", price: 30, gf: false },
+                { id: "steak_frites", name: "Steak, Fritz and Mushrooms", price: 40, gf: true },
+                { id: "chicken_burger", name: "Fried Chicken Brioche Burger", price: 25, gf: false },
+                { id: "fish_chips", name: "The Gardens Fish & Chips", price: 30, gf: false },
+                { id: "arancini", name: "Arancini Makhani", price: 28, gf: false },
+            ]},
+            { category: "Hand-Crafted Pizza (11-inch)", items: [
+                { id: "pizza_margherita", name: "Margherita Pizza", price: 30, gf: true },
+                { id: "pizza_chicken", name: "Chicken Pizza", price: 30, gf: true },
+                { id: "pizza_pepperoni", name: "Pepperoni Pizza", price: 30, gf: true },
+            ]},
+            { category: "Sides", items: [
+                { id: "wedges", name: "Wedges", price: 15, gf: false },
+                { id: "fries", name: "Fries", price: 15, gf: false },
+            ]},
+            { category: "Add Ons", items: [
+                { id: "addon_bacon", name: "Bacon", price: 8, gf: false },
+                { id: "addon_salmon", name: "Smoked Salmon", price: 10, gf: false },
+                { id: "addon_ciabatta", name: "Ciabatta Toast x2", price: 6, gf: false },
+                { id: "addon_rosti", name: "Potato Rosti x2", price: 7, gf: false },
+                { id: "addon_eggs", name: "Eggs x2", price: 8, gf: false },
+            ]},
+            { category: "Children's Corner", items: [
+                { id: "kids_fish_chips", name: "Kids Fish & Chips", price: 15, gf: false },
+                { id: "kids_pancakes", name: "Mini Pancakes", price: 15, gf: false },
+            ]},
+        ];
+        const MENU_LOOKUP = {};
+        MENU.forEach(cat => cat.items.forEach(item => MENU_LOOKUP[item.id] = item));
+
+        let currentOrderQty = {};
+        MENU.forEach(cat => cat.items.forEach(item => currentOrderQty[item.id] = 0));
+        let localInMemoryOrders = [];
+        let latestOrdersSnapshot = [];
+
 
         // Visual layout target elements
         const statusEl = document.getElementById('connection-status');
@@ -446,6 +542,7 @@
                 statusEl.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800";
                 statusEl.innerHTML = `<span class="h-2 w-2 rounded-full bg-emerald-500"></span> Live Cloud Active`;
                 subscribeToVotes();
+                subscribeToOrders();
             } catch (err) {
                 console.error("Database connection refused, starting offline mode:", err);
                 setOfflineMode();
@@ -456,6 +553,7 @@
             statusEl.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800";
             statusEl.innerHTML = `<span class="h-2 w-2 rounded-full bg-amber-500"></span> Local Sandbox`;
             renderStatistics(localInMemoryVotes);
+            renderOrderSummary(localInMemoryOrders);
         }
 
         function subscribeToVotes() {
@@ -473,6 +571,208 @@
                 showToast("Real-time load error. Using local mode.", "⚠️");
                 setOfflineMode();
             });
+        }
+
+        function subscribeToOrders() {
+            if (!auth.currentUser) return;
+            const ordersCollection = collection(db, 'artifacts', appId, 'public', 'data', 'orders');
+            const q = query(ordersCollection);
+            onSnapshot(q, (snapshot) => {
+                const ordersList = [];
+                snapshot.forEach((doc) => {
+                    ordersList.push({ id: doc.id, ...doc.data() });
+                });
+                renderOrderSummary(ordersList);
+            }, (error) => {
+                console.error("Order subscription failure:", error);
+            });
+        }
+
+        // ---------- Meal Pre-Order form logic ----------
+        function renderMenuForm() {
+            const container = document.getElementById('menu-form-list');
+            if (!container) return;
+            container.innerHTML = '';
+            MENU.forEach(cat => {
+                const block = document.createElement('div');
+                let html = `<h4 class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-2">${cat.category}</h4><div class="space-y-2">`;
+                cat.items.forEach(item => {
+                    html += `
+                        <div class="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2">
+                            <div>
+                                <span class="text-sm font-medium text-slate-800">${item.name}</span>
+                                ${item.gf ? '<span class="ml-2 text-[9px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">GF option</span>' : ''}
+                                <span class="block text-[11px] text-slate-400">$${item.price.toFixed(2)}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button type="button" onclick="adjustQty('${item.id}', -1)" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm">&minus;</button>
+                                <span id="qty-${item.id}" class="w-5 text-center text-sm font-semibold">0</span>
+                                <button type="button" onclick="adjustQty('${item.id}', 1)" class="w-7 h-7 rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold text-sm">+</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                block.innerHTML = html;
+                container.appendChild(block);
+            });
+        }
+
+        function adjustQty(itemId, delta) {
+            currentOrderQty[itemId] = Math.max(0, (currentOrderQty[itemId] || 0) + delta);
+            document.getElementById(`qty-${itemId}`).textContent = currentOrderQty[itemId];
+            updateRunningTotal();
+        }
+
+        function updateRunningTotal() {
+            let total = 0;
+            Object.entries(currentOrderQty).forEach(([id, qty]) => {
+                if (qty > 0) total += qty * MENU_LOOKUP[id].price;
+            });
+            const totalEl = document.getElementById('order-running-total');
+            if (totalEl) totalEl.textContent = `$${total.toFixed(2)}`;
+        }
+
+        function resetOrderForm() {
+            MENU.forEach(cat => cat.items.forEach(item => {
+                currentOrderQty[item.id] = 0;
+                const el = document.getElementById(`qty-${item.id}`);
+                if (el) el.textContent = '0';
+            }));
+            document.getElementById('order-name-input').value = '';
+            document.getElementById('order-notes-input').value = '';
+            updateRunningTotal();
+        }
+
+        async function submitFoodOrder() {
+            const name = document.getElementById('order-name-input').value.trim();
+            const notes = document.getElementById('order-notes-input').value.trim();
+
+            if (!name) {
+                showToast("Please enter your family name first!", "⚠️");
+                document.getElementById('order-name-input').focus();
+                return;
+            }
+
+            const items = Object.fromEntries(Object.entries(currentOrderQty).filter(([, qty]) => qty > 0));
+            if (Object.keys(items).length === 0) {
+                showToast("Please select at least one item!", "⚠️");
+                return;
+            }
+
+            const orderPayload = { name, items, notes, timestamp: Date.now() };
+            const btn = document.getElementById('btn-submit-order');
+            btn.disabled = true;
+            btn.textContent = '⏳ Submitting...';
+
+            if (isCloudActive && auth.currentUser) {
+                try {
+                    const ordersCollection = collection(db, 'artifacts', appId, 'public', 'data', 'orders');
+                    await addDoc(ordersCollection, orderPayload);
+                    showToast("Order submitted — thank you!", "✨");
+                    resetOrderForm();
+                } catch (err) {
+                    console.error("Cloud order write failed:", err);
+                    showToast("Cloud error — saved locally instead.", "⚠️");
+                    saveLocalOrderFallback(orderPayload);
+                }
+            } else {
+                saveLocalOrderFallback(orderPayload);
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '🚀 Submit Order';
+        }
+
+        function saveLocalOrderFallback(payload) {
+            localInMemoryOrders.push(payload);
+            renderOrderSummary(localInMemoryOrders);
+            showToast("Saved locally to this browser tab!", "📋");
+            resetOrderForm();
+        }
+
+        function renderOrderSummary(ordersList) {
+            latestOrdersSnapshot = ordersList;
+            const container = document.getElementById('order-summary-list');
+            const countBadge = document.getElementById('order-count-badge');
+            if (!container || !countBadge) return;
+
+            countBadge.textContent = `${ordersList.length} order${ordersList.length === 1 ? '' : 's'} in`;
+
+            if (ordersList.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 italic py-2">No orders submitted yet.</p>`;
+                document.getElementById('order-grand-total').textContent = '$0.00';
+                return;
+            }
+
+            const itemTotals = {};
+            let grandTotal = 0;
+            ordersList.forEach(order => {
+                Object.entries(order.items || {}).forEach(([id, qty]) => {
+                    if (!MENU_LOOKUP[id]) return;
+                    itemTotals[id] = (itemTotals[id] || 0) + qty;
+                    grandTotal += qty * MENU_LOOKUP[id].price;
+                });
+            });
+
+            const sortedIds = Object.keys(itemTotals).sort((a, b) => itemTotals[b] - itemTotals[a]);
+            container.innerHTML = sortedIds.map(id => `
+                <div class="flex justify-between">
+                    <span class="text-slate-700">${itemTotals[id]}&times; ${MENU_LOOKUP[id].name}</span>
+                    <span class="font-semibold text-slate-900">$${(itemTotals[id] * MENU_LOOKUP[id].price).toFixed(2)}</span>
+                </div>
+            `).join('');
+            document.getElementById('order-grand-total').textContent = `$${grandTotal.toFixed(2)}`;
+        }
+
+        function exportOrderSummary() {
+            if (latestOrdersSnapshot.length === 0) {
+                showToast("No orders to export yet!", "⚠️");
+                return;
+            }
+
+            const itemTotals = {};
+            let grandTotal = 0;
+            latestOrdersSnapshot.forEach(order => {
+                Object.entries(order.items || {}).forEach(([id, qty]) => {
+                    if (!MENU_LOOKUP[id]) return;
+                    itemTotals[id] = (itemTotals[id] || 0) + qty;
+                    grandTotal += qty * MENU_LOOKUP[id].price;
+                });
+            });
+            const sortedIds = Object.keys(itemTotals).sort((a, b) => itemTotals[b] - itemTotals[a]);
+
+            let lines = [
+                `Cafe Miko Group Order — Sunday 2 August 2026, 12 Noon`,
+                `Western Terrace, 33 guests`,
+                ``,
+                `CONSOLIDATED ITEM TOTALS:`
+            ];
+            sortedIds.forEach(id => {
+                lines.push(`${itemTotals[id]}x ${MENU_LOOKUP[id].name} — $${(itemTotals[id] * MENU_LOOKUP[id].price).toFixed(2)}`);
+            });
+            lines.push(``, `GRAND TOTAL: $${grandTotal.toFixed(2)}`, ``, `BY FAMILY:`);
+            latestOrdersSnapshot.forEach(order => {
+                const itemsText = Object.entries(order.items || {})
+                    .map(([id, qty]) => `${qty}x ${MENU_LOOKUP[id] ? MENU_LOOKUP[id].name : id}`)
+                    .join(', ');
+                lines.push(`${order.name || 'Anonymous'}: ${itemsText}${order.notes ? ` | Notes: ${order.notes}` : ''}`);
+            });
+
+            const fullText = lines.join('\n');
+            const textArea = document.createElement("textarea");
+            textArea.value = fullText;
+            textArea.style.position = "fixed";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast(`Copied order summary for ${latestOrdersSnapshot.length} families!`, "📤");
+            } catch (err) {
+                showToast("Could not copy — try selecting manually.", "❌");
+            }
+            document.body.removeChild(textArea);
         }
 
         // ---------- Normalize legacy vote records (single venue/weekend strings) ----------
@@ -864,9 +1164,12 @@
         window.cycleDateRating = cycleDateRating;
         window.toggleAnySunday = toggleAnySunday;
         window.exportVotesAsText = exportVotesAsText;
+        window.adjustQty = adjustQty;
+        window.submitFoodOrder = submitFoodOrder;
+        window.exportOrderSummary = exportOrderSummary;
 
-        // Initialize session routines on startup — the voting form is retired, so we
-        // only need to start the Firestore session to display the final results.
+        // Initialize session routines on startup
+        renderMenuForm();
         document.getElementById('btn-modal-confirm').addEventListener('click', clearAllVotes);
         startSession();
     </script>
