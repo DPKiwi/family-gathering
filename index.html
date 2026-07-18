@@ -273,34 +273,34 @@
         // ---------- Meal Pre-Order ----------
         const MENU = [
             { category: "Brunch-Lunch", items: [
-                { id: "french_toast", name: "Croissant Style French Toast", price: 26, gf: false },
-                { id: "turkish_eggs", name: "Turkish Eggs", price: 25, gf: true },
-                { id: "thai_curry_roll", name: "Thai Green Curry Hawker Roll", price: 25, gf: false },
-                { id: "mikos_benedict", name: "Miko's Benedict", price: 30, gf: false },
-                { id: "steak_frites", name: "Steak, Fritz and Mushrooms", price: 40, gf: true },
-                { id: "chicken_burger", name: "Fried Chicken Brioche Burger", price: 25, gf: false },
-                { id: "fish_chips", name: "The Gardens Fish & Chips", price: 30, gf: false },
-                { id: "arancini", name: "Arancini Makhani", price: 28, gf: false },
+                { id: "french_toast", name: "Croissant Style French Toast", price: 26, gf: false, desc: "Croissant finished with Tiramisu cream & summer berries." },
+                { id: "turkish_eggs", name: "Turkish Eggs", price: 25, gf: true, desc: "Ciabatta, Sesame yoghurt, Hungarian dukkha, poached eggs." },
+                { id: "thai_curry_roll", name: "Thai Green Curry Hawker Roll", price: 25, gf: false, desc: "Tasty Thai green curry chicken parotta wrap with slaw & mayo." },
+                { id: "mikos_benedict", name: "Miko's Benedict", price: 30, gf: false, desc: "Wagyu Beef croquettes, wilted greens, Free Range eggs, paprika hollandaise." },
+                { id: "steak_frites", name: "Steak, Fritz and Mushrooms", price: 40, gf: true, desc: "Sirloin with a zesty hint & fresh garden herb flavours. Served with chimichurri." },
+                { id: "chicken_burger", name: "Fried Chicken Brioche Burger", price: 25, gf: false, desc: "Crispy chicken, salted cucumber, citrus slaw, swiss cheese, and sriracha mayo." },
+                { id: "fish_chips", name: "The Gardens Fish & Chips", price: 30, gf: false, desc: "Beer battered daily catch, chips, dill pickle mayo, and citrus slaw." },
+                { id: "arancini", name: "Arancini Makhani", price: 28, gf: false, desc: "Flavour infusion with field mushrooms, wilted greens, creamy makhani sauce & crispy fried risotto balls." },
             ]},
-            { category: "Hand-Crafted Pizza (11-inch)", items: [
-                { id: "pizza_margherita", name: "Margherita Pizza", price: 30, gf: true },
-                { id: "pizza_chicken", name: "Chicken Pizza", price: 30, gf: true },
-                { id: "pizza_pepperoni", name: "Pepperoni Pizza", price: 30, gf: true },
+            { category: "Hand-Crafted Pizza (11-inch)", note: "All pizzas are 11-inch thick crust & fire-baked, with a tomato sauce base and mozzarella cheese.", items: [
+                { id: "pizza_margherita", name: "Margherita Pizza", price: 30, gf: true, desc: "Sliced tomato, buffalo cheese, and pesto." },
+                { id: "pizza_chicken", name: "Chicken Pizza", price: 30, gf: true, desc: "Mushroom and rocket." },
+                { id: "pizza_pepperoni", name: "Pepperoni Pizza", price: 30, gf: true, desc: "Nduja, pepperoni, and olive oil." },
             ]},
-            { category: "Sides", items: [
-                { id: "wedges", name: "Wedges", price: 15, gf: false },
-                { id: "fries", name: "Fries", price: 15, gf: false },
+            { category: "Sides", note: "Upgrade your side: add Bacon or Cheese for $5.00 extra.", items: [
+                { id: "wedges", name: "Wedges", price: 15, gf: false, desc: "Served with sour cream, sweet chilli." },
+                { id: "fries", name: "Fries", price: 15, gf: false, desc: "Served with aioli, tomato sauce." },
             ]},
             { category: "Add Ons", items: [
-                { id: "addon_bacon", name: "Bacon", price: 8, gf: false },
-                { id: "addon_salmon", name: "Smoked Salmon", price: 10, gf: false },
-                { id: "addon_ciabatta", name: "Ciabatta Toast x2", price: 6, gf: false },
-                { id: "addon_rosti", name: "Potato Rosti x2", price: 7, gf: false },
-                { id: "addon_eggs", name: "Eggs x2", price: 8, gf: false },
+                { id: "addon_bacon", name: "Bacon", price: 8, gf: false, desc: "" },
+                { id: "addon_salmon", name: "Smoked Salmon", price: 10, gf: false, desc: "" },
+                { id: "addon_ciabatta", name: "Ciabatta Toast x2", price: 6, gf: false, desc: "" },
+                { id: "addon_rosti", name: "Potato Rosti x2", price: 7, gf: false, desc: "" },
+                { id: "addon_eggs", name: "Eggs x2", price: 8, gf: false, desc: "" },
             ]},
             { category: "Children's Corner", items: [
-                { id: "kids_fish_chips", name: "Kids Fish & Chips", price: 15, gf: false },
-                { id: "kids_pancakes", name: "Mini Pancakes", price: 15, gf: false },
+                { id: "kids_fish_chips", name: "Kids Fish & Chips", price: 15, gf: false, desc: "" },
+                { id: "kids_pancakes", name: "Mini Pancakes", price: 15, gf: false, desc: "" },
             ]},
         ];
         const MENU_LOOKUP = {};
@@ -580,16 +580,19 @@
             container.innerHTML = '';
             MENU.forEach(cat => {
                 const block = document.createElement('div');
-                let html = `<h4 class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-2">${cat.category}</h4><div class="space-y-2">`;
+                let html = `<h4 class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">${cat.category}</h4>`;
+                if (cat.note) html += `<p class="text-[11px] text-slate-500 mb-2 leading-snug">${cat.note}</p>`;
+                html += `<div class="space-y-2">`;
                 cat.items.forEach(item => {
                     html += `
-                        <div class="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2">
-                            <div>
+                        <div class="flex items-start justify-between gap-3 rounded-lg border border-slate-200 px-3 py-2.5">
+                            <div class="flex-1">
                                 <span class="text-sm font-medium text-slate-800">${item.name}</span>
                                 ${item.gf ? '<span class="ml-2 text-[9px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">GF option</span>' : ''}
-                                <span class="block text-[11px] text-slate-400">$${item.price.toFixed(2)}</span>
+                                ${item.desc ? `<span class="block text-[11px] text-slate-500 mt-0.5 leading-snug">${item.desc}</span>` : ''}
+                                <span class="block text-[11px] text-slate-400 mt-0.5">$${item.price.toFixed(2)}</span>
                             </div>
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-2 shrink-0 pt-0.5">
                                 <button type="button" onclick="adjustQty('${item.id}', -1)" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm">&minus;</button>
                                 <span id="qty-${item.id}" class="w-5 text-center text-sm font-semibold">0</span>
                                 <button type="button" onclick="adjustQty('${item.id}', 1)" class="w-7 h-7 rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold text-sm">+</button>
