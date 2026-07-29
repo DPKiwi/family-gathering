@@ -190,15 +190,9 @@
                         <span>🧾 Final Order Record</span>
                         <span id="order-count-badge" class="text-[11px] font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">0 orders in</span>
                     </h3>
-                    <p class="text-[10px] text-slate-400 mb-3">Live summary of everything ordered, plus any notes families added.</p>
+                    <p class="text-[10px] text-slate-400 mb-3">Live summary of everything ordered.</p>
                     <div id="order-summary-list" class="space-y-1.5 text-xs">
                         <p class="text-slate-400 italic py-2">No orders submitted yet.</p>
-                    </div>
-                    <div class="pt-3 mt-3 border-t border-emerald-100">
-                        <h4 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Notes & Dietary Flags</h4>
-                        <ul id="family-notes-list" class="space-y-2 text-xs divide-y divide-slate-100 max-h-48 overflow-y-auto pr-1">
-                            <p class="text-slate-400 italic py-2">No notes yet.</p>
-                        </ul>
                     </div>
                 </div>
 
@@ -783,14 +777,12 @@
             latestOrdersSnapshot = ordersList;
             const container = document.getElementById('order-summary-list');
             const countBadge = document.getElementById('order-count-badge');
-            const notesContainer = document.getElementById('family-notes-list');
             if (!container || !countBadge) return;
 
             countBadge.textContent = `${ordersList.length} order${ordersList.length === 1 ? '' : 's'} in`;
 
             if (ordersList.length === 0) {
                 container.innerHTML = `<p class="text-slate-400 italic py-2">No orders submitted yet.</p>`;
-                if (notesContainer) notesContainer.innerHTML = `<p class="text-slate-400 italic py-2">No notes yet.</p>`;
                 return;
             }
 
@@ -808,21 +800,6 @@
                     <span class="text-slate-700">${itemTotals[id]}&times; ${MENU_LOOKUP[id].name}</span>
                 </div>
             `).join('');
-
-            // Notes & dietary flags — sourced from each order's own notes field, not old vote data.
-            if (notesContainer) {
-                const withNotes = ordersList.filter(o => o.notes && o.notes.trim());
-                if (withNotes.length === 0) {
-                    notesContainer.innerHTML = `<p class="text-slate-400 italic py-2">No notes added.</p>`;
-                } else {
-                    notesContainer.innerHTML = withNotes.map(order => `
-                        <li class="py-2 first:pt-0">
-                            <span class="font-semibold text-slate-800">${order.name || 'Anonymous'}:</span>
-                            <span class="text-slate-500 italic"> "${order.notes}"</span>
-                        </li>
-                    `).join('');
-                }
-            }
         }
 
         function exportOrderSummary() {
