@@ -120,6 +120,20 @@
                                 <p class="text-xs text-slate-500">3 round tables of 10 plus a smaller table — our group of 33 will be seated together outside.</p>
                             </div>
                         </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-xl">☀️</span>
+                            <div>
+                                <p class="font-semibold text-slate-900">Forecast: fine with southerlies</p>
+                                <p class="text-xs text-slate-500">14&deg; high / 5&deg; low &middot; rain chance 30% (light), 5% (heavy) &middot; issued 12:35pm, 26 July. As always, worth a quick check again closer to the day since forecasts can shift.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="text-xl">🧭</span>
+                            <div>
+                                <p class="font-semibold text-slate-900">On the day</p>
+                                <p class="text-xs text-slate-500">Aim to arrive a little before 12 noon. Food's all pre-ordered and sorted — just order your drinks on arrival via the QR code, till, or kiosk at the entrance. As we're on the outdoor terrace, dress for the weather (a light layer is a safe bet either way!).</p>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -194,24 +208,22 @@
                     </div>
                 </div>
 
-                <!-- Live Order Summary -->
+                <!-- Final Order Record -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
                     <h3 class="font-bold text-slate-900 text-sm mb-1 flex items-center justify-between">
-                        <span>🧾 Live Order Summary</span>
+                        <span>🧾 Final Order Record</span>
                         <span id="order-count-badge" class="text-[11px] font-medium bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full">0 orders in</span>
                     </h3>
-                    <p class="text-[10px] text-slate-400 mb-3">Updates live as families submit their order above.</p>
+                    <p class="text-[10px] text-slate-400 mb-3">Live summary of everything ordered, plus any notes families added.</p>
                     <div id="order-summary-list" class="space-y-1.5 text-xs">
                         <p class="text-slate-400 italic py-2">No orders submitted yet.</p>
                     </div>
-                </div>
-
-                <!-- Simple list of notes gathered from votes -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100">
-                    <h3 class="font-bold text-slate-900 text-sm mb-3">💬 Family Notes & Dietary Needs</h3>
-                    <ul id="family-notes-list" class="space-y-2 text-xs divide-y divide-slate-100 max-h-64 overflow-y-auto pr-1">
-                        <!-- Dynamic items injected here -->
-                    </ul>
+                    <div class="pt-3 mt-3 border-t border-emerald-100">
+                        <h4 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Notes & Dietary Flags</h4>
+                        <ul id="family-notes-list" class="space-y-2 text-xs divide-y divide-slate-100 max-h-48 overflow-y-auto pr-1">
+                            <p class="text-slate-400 italic py-2">No notes yet.</p>
+                        </ul>
+                    </div>
                 </div>
 
                 <!-- Archive Tool -->
@@ -278,9 +290,9 @@
         // and orders will simply save without sending a confirmation email.
         // -------------------------------------------------------------
         const EMAILJS_CONFIG = {
-            publicKey: "bhyBFu12bS2IJ21HN",
-            serviceId: "service_9z76vob",
-            templateId: "template_pdlp7m3"
+            publicKey: "YOUR_PUBLIC_KEY",
+            serviceId: "YOUR_SERVICE_ID",
+            templateId: "YOUR_TEMPLATE_ID"
         };
         // -------------------------------------------------------------
         let isEmailActive = false;
@@ -795,12 +807,14 @@
             latestOrdersSnapshot = ordersList;
             const container = document.getElementById('order-summary-list');
             const countBadge = document.getElementById('order-count-badge');
+            const notesContainer = document.getElementById('family-notes-list');
             if (!container || !countBadge) return;
 
             countBadge.textContent = `${ordersList.length} order${ordersList.length === 1 ? '' : 's'} in`;
 
             if (ordersList.length === 0) {
                 container.innerHTML = `<p class="text-slate-400 italic py-2">No orders submitted yet.</p>`;
+                if (notesContainer) notesContainer.innerHTML = `<p class="text-slate-400 italic py-2">No notes yet.</p>`;
                 return;
             }
 
@@ -818,6 +832,21 @@
                     <span class="text-slate-700">${itemTotals[id]}&times; ${MENU_LOOKUP[id].name}</span>
                 </div>
             `).join('');
+
+            // Notes & dietary flags — sourced from each order's own notes field, not old vote data.
+            if (notesContainer) {
+                const withNotes = ordersList.filter(o => o.notes && o.notes.trim());
+                if (withNotes.length === 0) {
+                    notesContainer.innerHTML = `<p class="text-slate-400 italic py-2">No notes added.</p>`;
+                } else {
+                    notesContainer.innerHTML = withNotes.map(order => `
+                        <li class="py-2 first:pt-0">
+                            <span class="font-semibold text-slate-800">${order.name || 'Anonymous'}:</span>
+                            <span class="text-slate-500 italic"> "${order.notes}"</span>
+                        </li>
+                    `).join('');
+                }
+            }
         }
 
         function exportOrderSummary() {
@@ -1034,38 +1063,9 @@
             let totalAdults = 0;
             let totalKids = 0;
 
-            const notesContainer = document.getElementById('family-notes-list');
-            notesContainer.innerHTML = '';
-
             votesDatabase.forEach(vote => {
                 totalAdults += parseInt(vote.adults || 0);
                 totalKids += parseInt(vote.kids || 0);
-
-                const vRatings = getVenueRatings(vote); // legacy-only, for display in notes below
-                const dRatings = getDateRatings(vote);
-
-                const voteAuthor = vote.name || "Anonymous";
-                let sizeLabel = `${vote.adults || 2}A`;
-                if (vote.kids > 0) sizeLabel += `, ${vote.kids}C`;
-
-                const topDates = Object.entries(dRatings).filter(([, s]) => s === 2).map(([k]) => k);
-                let dateLabel = topDates.length ? topDates.join(', ') : (Object.keys(dRatings)[0] || '—');
-                if (vote.anySunday) dateLabel += ' (any Sunday ok)';
-
-                const displayNote = vote.notes ? `"${vote.notes}"` : "";
-
-                const li = document.createElement('li');
-                li.className = "py-2 first:pt-0";
-                li.innerHTML = `
-                    <div class="flex justify-between font-bold text-slate-800">
-                        <span>👤 ${voteAuthor} <span class="font-normal text-[9px] text-slate-500 bg-slate-100 py-0.5 px-2 rounded-full ml-1">${sizeLabel}</span></span>
-                        <span class="text-emerald-700 text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded font-semibold text-right">${dateLabel}</span>
-                    </div>
-                    <div class="text-[10px] text-slate-500 mt-1 flex justify-between gap-4">
-                        <span class="italic text-slate-400 max-w-[220px] truncate">${displayNote}</span>
-                    </div>
-                `;
-                notesContainer.appendChild(li);
             });
 
             let totalCount = totalAdults + totalKids;
